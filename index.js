@@ -3,12 +3,6 @@ const bodyParser = require("body-parser")
 var cookieParser = require('cookie-parser')
 const model = require("./model")
 
-// Инициализируем тестовы данные
-// todo: удалить
-//model.testData()
-
-//console.log(model)
-
 const app = express()
 app.use(cookieParser())
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -52,7 +46,8 @@ app.get('/tick', function (req, res) {
     model.tick(cookies.user)
     res.send({
         result: 1,
-        users: model.serializeUsers()
+        users: model.serializeUsers(),
+        marksVisible: model.marksVisible
     })
 })
 
@@ -67,9 +62,17 @@ app.post('/sendMark', urlencodedParser, (req, res) => {
     res.send("OK")
 })
 
+app.post('/showMarks', urlencodedParser, (req, res) => {
+    model.showMarks()
+    res.send("OK")
+})
+
 app.post('/fullReset', urlencodedParser, (req, res) => {
     model.fullReset()
     res.redirect("/")
 })
 
 app.listen(3000)
+
+// Запускаем обработчик ожидания
+model.startCheckingInactiveUsers()

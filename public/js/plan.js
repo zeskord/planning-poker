@@ -20,8 +20,13 @@ $('#sendMark').click(function () {
 
 $('#fullReset').click(function () {
     
-    var mark = $('#markInput')[0].value;
     $.post('/fullReset', {}, () => {
+    })
+})
+
+$('#showMarks').click(function () {
+    
+    $.post('/showMarks', {}, () => {
     })
 })
 
@@ -36,7 +41,7 @@ $(function () {
             data,
             function (serverData) {
                 updateUsersList(serverData)
-                setTimeout(sendGetQuery, 10000)
+                setTimeout(sendGetQuery, 2000)
             })
     }
 
@@ -44,16 +49,17 @@ $(function () {
 
 function updateUsersList(serverData) {
     users = serverData.users
+    marksVisible = serverData.marksVisible
     usersList = $('#userList')
     
     for(let userData of users) {
         findedElement = usersList.find('#' + userData.id)
         var badge = ""
         var success = ""
-        if (userData.mark !== undefined) {
+        if (userData.mark !== undefined && marksVisible) {
             badge = '<span class="badge badge-primary badge-pill">' + userData.mark + '</span>';
         }
-        if (true) { //todo
+        if (userData.mark !== undefined) {
             success = "list-group-item-success " 
         }
         var element =
