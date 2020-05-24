@@ -72,7 +72,7 @@ app.post('/fullReset', urlencodedParser, (req, res) => {
     res.redirect("/")
 })
 
-app.listen(8081)
+app.listen(8080)
 
 // Запускаем обработчик ожидания
 model.startCheckingInactiveUsers()
