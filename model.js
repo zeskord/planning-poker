@@ -7,7 +7,7 @@ model.options = {
     inactiveUsersTimeout: 30000
 }
 
-model.userIdCounter = 0;
+model.userIdCounter = 0
 
 // Пользователь
 // Ключ - строка - Имя
@@ -132,13 +132,13 @@ model.fullReset = function () {
 }
 
 model.startCheckingInactiveUsers = function () {
-    setInterval(this.deleteInactiveUsers, this.options.ckeckInactiveUsersInterval);
+    setInterval(this.deleteInactiveUsers, this.options.ckeckInactiveUsersInterval)
 }
 
 // проверяет, время последних запросов от пользователей и удаляет неактивных
 model.deleteInactiveUsers = function () {
 
-    var currentDate = new Date();
+    var currentDate = new Date()
 
     for (var [name, user] of model.users) {
         if (user.lastRequestTime === undefined || currentDate - user.lastRequestTime > model.options.inactiveUsersTimeout) {

@@ -51,6 +51,12 @@ app.get('/tick', function (req, res) {
     })
 })
 
+// Просто вернуть данные пользователя на клиент.
+app.get('/getUserData', function (req, res) {
+    var cookies = req.cookies
+    res.send(cookies.user)
+})
+
 app.post('/clearMarks', urlencodedParser, (req, res) => {
     model.clearMarks()
     res.send("OK")
