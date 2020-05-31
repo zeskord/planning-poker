@@ -12,7 +12,7 @@ app.use(express.static("public"))
 app.get('/', function (req, res) {
     var cookies = req.cookies
     if (cookies.user === undefined) {
-        res.render("login", cookies.user)
+        res.render("login", {invalidlogin: false})
     } else {
         res.render("plan", cookies.user)
     }
@@ -29,8 +29,13 @@ app.post('/', urlencodedParser, (req, res) => {
     var userData  = {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator === "on")}
-    res.cookie("user", userData)
-    res.render("plan", userData)
+    // TODO: сделать нормальную валидацию, а не проверку на пустую строку.
+    if (userData.name === "") {
+        res.render("login", {invalidlogin: true})
+    } else {
+        res.cookie("user", userData)
+        res.render("plan", userData)
+    }
 })
 
 app.post('/exit', urlencodedParser, (req, res) => {
@@ -38,7 +43,7 @@ app.post('/exit', urlencodedParser, (req, res) => {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator === "on")}
     res.clearCookie("user")
-    res.render("login")
+    res.render("login", {invalidlogin: false})
 })
 
 app.get('/tick', function (req, res) {
