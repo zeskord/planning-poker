@@ -7,6 +7,10 @@ model.options = {
     inactiveUsersTimeout: 30000
 }
 
+// Поиск по имени пользователя имени его идентификатора в элементе списка на клиенте.
+// Не очищается при выходе пользователя, живет до конца. 
+model.userIDs = new Map()
+
 model.userIdCounter = 0
 
 // Пользователь
@@ -25,14 +29,21 @@ model.addUser = function (userName) {
     // Ищем пользователя с таким именем
     var user = this.users.get(userName)
     if (user === undefined) {
+        
+        var userID = this.userIDs.get(userName)
+        if (userID === undefined) {
+            // Раньше не было такого имени
+            model.userIdCounter = model.userIdCounter + 1
+            userID = "user" + model.userIdCounter.toString()
+        }
         // Добавляется новый пользователь
-        model.userIdCounter = model.userIdCounter + 1
         var user = {
             name: userName,
-            id: "user" + model.userIdCounter.toString(),
+            id: userID,
             lastRequestTime: new Date()
         }
         this.users.set(userName, user)
+        
     }
 
 }
