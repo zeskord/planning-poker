@@ -36,44 +36,46 @@
 
   <div class="container">
 
-    <div class="row my-2">
-      <div class="col">
-        
-        
-        <div class="input-group input-group-lg">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-lg">Оценка</span>
-          </div>
-          <input type="number" class="form-control" id="markInput" aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-lg" >
+    <div class="my-2">
+
+      <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-lg">Оценка</span>
+        </div>
+        <input type="number" class="form-control" id="markInput" aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-lg">
+      </div>
+
+    </div>
+
+    <div class="my-2">
+      <button type="button" class="btn btn-primary btn-lg" id="sendMark">Отправить</button>
+    </div>
+
+    <div class="my-2">
+      <ul class="list-group" id="userList">
+      </ul>
+    </div>
+
+    <div class="my-2">
+      <button type="button" class="btn btn-success btn-lg" id="showMarks">Вскрываемся</button>
+    </div>
+
+    <div class="my-2">
+      <button type="button" class="btn btn-warning btn-lg" id="clearMarks">Очистить оценки</button>
+    </div>
+
+    <div class="card mt-3" id="spectatorsCard">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Наблюдатели</h6>
+
+        <div class="mb-2 text-muted">
+          <ul class="list-group" id="spectatorList">
+          </ul>
         </div>
 
       </div>
-    </div>
 
-    <div class="row my-2">
-      <div class="col">
-        <button type="button" class="btn btn-primary btn-lg" id="sendMark">Отправить</button>
-      </div>
-    </div>
-
-    <div class="row my-2">
-      <div class="col">
-        <ul class="list-group" id="userList">
-        </ul>
-      </div>
-    </div>
-
-    <div class="row my-2">
-      <div class="col">
-        <button type="button" class="btn btn-success btn-lg" id="showMarks">Вскрываемся</button>
-      </div>
-    </div>
-
-    <div class="row my-2">
-      <div class="col">
-        <button type="button" class="btn btn-warning btn-lg" id="clearMarks">Очистить оценки</button>
-      </div>
     </div>
 
   </div>

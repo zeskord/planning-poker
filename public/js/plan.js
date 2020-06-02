@@ -37,6 +37,9 @@ $("#markInput").keydown(function (event) {
 
 $(function () {
 
+    // Инициализируем массив имен пользователей в данных формы, чтобы потом можно было их выпиливать.
+    $("body").data("userIDs", [])
+    $("body").data("spectatorIDs", [])
     getUserData()
     sendGetQuery()
 
@@ -61,13 +64,34 @@ $(function () {
 
 function updateUsersList(serverData) {
 
+    var usersList = $('#userList')
+
+    // Получаем массив идентификаторов пользователей в списке.
+    var currentUserIDs = $("body").data("userIDs")
+    // Массив идентификаторов пользователей, который вернула модель.
+    var userIDs = serverData.userIDs
+    // Ищем элемент удаленного пользователя и выпиливаем его из Листгруппы.
+    var IDsToRemove = []
+    for (let currentUserID of currentUserIDs) {
+        if (userIDs.includes(currentUserID, 0) === false) {
+            usersList.find(`#${currentUserID}`).remove()
+            IDsToRemove.push(currentUserID)
+        }
+    }
+    if (IDsToRemove.length !== 0) {
+        for (let id of IDsToRemove) {
+            var index = IDsToRemove.indexOf(id)
+            currentUserIDs.splice(index + 1, 1)
+        }
+    }
+
     var users = serverData.users
     var marksVisible = serverData.marksVisible
-    var usersList = $('#userList')
     var currentUserName = $("body").data("user").name
 
     for (let userData of users) {
-        findedElement = usersList.find('#' + userData.id)
+
+        foundElement = usersList.find(`#${userData.id}`)
         var bgcolor = ""
         var badge = ""
         var badgeStyle = "primary" // цвет бейджа по умолчанию.
@@ -84,19 +108,66 @@ function updateUsersList(serverData) {
         }
         var element =
             `<li class="list-group-item ${bgcolor} d-flex justify-content-between align-items-center" id="${userData.id}">${userData.name}${badge}</li>`
-        if (findedElement.length === 0) {
+        if (foundElement.length === 0) {
             usersList.append(element)
+            currentUserIDs.push(userData.id)
         } else {
-            findedElement.replaceWith(element)
+            foundElement.replaceWith(element)
         }
 
     }
+    $("body").data("userIDs", currentUserIDs)
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    // Наблюдатели
+
+    var spectatorsList = $('#spectatorList')
+    var currentSpectatorIDs = $("body").data("spectatorIDs")
+    var spectatorIDs = serverData.spectatorIDs
+    // Ищем элемент удаленного пользователя и выпиливаем его из Листгруппы.
+    var IDsToRemove = []
+    for (let currentSpectatorID of currentSpectatorIDs) {
+        if (spectatorIDs.includes(currentSpectatorID, 0) === false) {
+            spectatorsList.find(`#${currentSpectatorID}`).remove()
+            IDsToRemove.push(currentSpectatorID)
+        }
+    }
+    if (IDsToRemove.length !== 0) {
+        for (let id of IDsToRemove) {
+            var index = IDsToRemove.indexOf(id)
+            currentSpectatorIDs.splice(index + 1, 1)
+        }
+    }
+    var spectators = serverData.spectators
+    for (let userData of spectators) {
+
+        foundElement = spectatorsList.find(`#${userData.id}`)
+        var element =
+            `<li class="list-group-item d-flex justify-content-between align-items-center" id="${userData.id}">${userData.name}</li>`
+        if (foundElement.length === 0) {
+            spectatorsList.append(element)
+            currentSpectatorIDs.push(userData.id)
+        } else {
+            foundElement.replaceWith(element)
+        }
+
+    }
+    $("body").data("spectatorIDs", currentSpectatorIDs)
 
 }
 
 function sendMark() {
     var mark = $('#markInput').val()
-    $.post('/sendMark', { mark: mark }, () => {
-    })
+    $.post('/sendMark',
+        // Это отправляем на сервер.
+        {
+            mark: mark
+        },
+        // А это используем для мгновенного обновления интерфейса на клиенте.
+        (mark) => {
+            // После отправки оценки на сервер, находим элемент и обновляем его.
+            // Но это не критично, можно сделать потом.
+
+
+        })
 }
