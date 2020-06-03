@@ -43,21 +43,41 @@ $(function () {
     getUserData()
     sendGetQuery()
 
-    function sendGetQuery() {
-        $.get("/tick",
-            {},
-            function (serverData) {
-                updateUsersList(serverData)
-                setTimeout(sendGetQuery, 2000)
-            })
+    // Получаем данные о себе с сервера, на основании печенья, которое ему отправляем.
+    function getUserData() {
+        try {
+            $.get("/getUserData",
+                {},
+                function (serverData) {
+                    $("body").data("user", {
+                        name: serverData.name,
+                        isSpectator: serverData.isSpectator
+                    })
+                })
+        } catch (err) {
+
+            console.log(err)
+
+        }
     }
 
-    function getUserData() {
-        $.get("/getUserData",
-            {},
-            function (serverData) {
-                $("body").data("user", { name: serverData.name, isSpectator: serverData.isSpectator })
-            })
+    // Тикающий запрос.
+    function sendGetQuery() {
+        try {
+            $.get("/tick",
+                {},
+                function (serverData) {
+                    updateUsersList(serverData)
+                    setTimeout(sendGetQuery, 2000)
+                })
+
+        } catch (err) {
+
+            setTimeout(sendGetQuery, 2000)
+            console.log(err)
+
+        }
+
     }
 
 })
@@ -139,6 +159,16 @@ function updateUsersList(serverData) {
         }
     }
     var spectators = serverData.spectators
+    // Если количество зрителей ноль, то всю карту не выводим.
+    var spectatorsCard = $("#spectatorsCard:visible")
+    if (spectatorsCard.length === 1 && spectators.length === 0) {
+        spectatorsCard.hide()
+    }
+    var spectatorsCard = $("#spectatorsCard:hidden")
+    if (spectators.length === 1 && spectators.length !== 0) {
+        spectatorsCard.show()
+    }
+
     for (let userData of spectators) {
 
         foundElement = spectatorsList.find(`#${userData.id}`)

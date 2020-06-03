@@ -61,7 +61,7 @@ app.get('/getUserData', function (req, res) {
         isSpectator: cookies.user.isSpectator,
         id: model.getUserID(cookies.user)
     } 
-    res.send(cookies.user)
+    res.send(user)
 })
 
 // Очищает оценки.
