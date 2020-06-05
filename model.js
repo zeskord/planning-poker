@@ -2,9 +2,9 @@ const model = {}
 
 model.options = {
     // Интервал проверки неактивных пользователей в миллисекундах
-    ckeckInactiveUsersInterval: 30000,
+    ckeckInactiveUsersInterval: 300000,
     // Количество миллисекунд без запросов от пользователя, когда он считается неактивным
-    inactiveUsersTimeout: 30000
+    inactiveUsersTimeout: 300000
 }
 
 // Поиск по имени пользователя имени его идентификатора и других реквизитов.
