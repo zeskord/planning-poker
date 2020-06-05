@@ -50,7 +50,7 @@ $(function () {
                 {},
                 function (serverData) {
                     $("body").data("user", {
-                        name: serverData.name,
+                        name: serverData.user,
                         isSpectator: serverData.isSpectator
                     })
                 })
