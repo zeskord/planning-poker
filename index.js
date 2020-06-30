@@ -1,9 +1,25 @@
 const express = require('express')
+const config = require('config')
+const path = require('path')
 const bodyParser = require("body-parser")
-var cookieParser = require('cookie-parser')
 const model = require("./model")
 
+var cookieParser = require('cookie-parser')
 const app = express()
+
+if (process.env.NODE_ENV === 'production') {
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
+
+const PORT = config.get('port') || 8080
+
+
+
+
 app.use(cookieParser())
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.set("view engine", "ejs")
@@ -13,7 +29,7 @@ app.use(express.static("public"))
 app.get('/', function (req, res) {
     var cookies = req.cookies
     if (cookies.user === undefined) {
-        res.render("login", {invalidlogin: false})
+        res.render("login", { invalidlogin: false })
     } else {
         res.render("plan", cookies.user)
     }
@@ -21,12 +37,13 @@ app.get('/', function (req, res) {
 
 // Залогиниться.
 app.post('/', urlencodedParser, (req, res) => {
-    var userData  = {
+    var userData = {
         name: req.body.userName,
-        isSpectator: (req.body.isSpectator === "on")}
+        isSpectator: (req.body.isSpectator === "on")
+    }
     // TODO: сделать нормальную валидацию, а не проверку на пустую строку.
     if (userData.name === "") {
-        res.render("login", {invalidlogin: true})
+        res.render("login", { invalidlogin: true })
     } else {
         res.cookie("user", userData)
         res.render("plan", userData)
@@ -36,7 +53,7 @@ app.post('/', urlencodedParser, (req, res) => {
 // Разлогиниться.
 app.post('/exit', urlencodedParser, (req, res) => {
     res.clearCookie("user")
-    res.render("login", {invalidlogin: false})
+    res.render("login", { invalidlogin: false })
 })
 
 // Периодический запрос от клиента.
@@ -60,7 +77,7 @@ app.get('/getUserData', function (req, res) {
         user: cookies.user.name,
         isSpectator: cookies.user.isSpectator,
         id: model.getUserID(cookies.user)
-    } 
+    }
     res.send(user)
 })
 
@@ -89,7 +106,7 @@ app.post('/fullReset', urlencodedParser, (req, res) => {
     res.redirect("/")
 })
 
-app.listen(8080)
+app.listen(PORT)
 
 // Запускаем обработчик ожидания
 model.startCheckingInactiveUsers()
