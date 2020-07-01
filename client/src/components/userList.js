@@ -1,7 +1,7 @@
 // Представляет список активных пользователей.
 import React, { Component } from 'react';
 import { ListGroup } from 'bootstrap-4-react';
-import User from './user'
+import User from './User'
 
 export default class UserList extends Component {
   

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Container, InputGroup, Form, Button, BDiv } from 'bootstrap-4-react';
-import UserList from './userList'
-import NavigationBar from './NavigationBar'
+import UserList from './components/UserList'
+import NavigationBar from './components/NavigationBar'
 
 export default class App extends Component {
     render() {
@@ -17,10 +17,10 @@ export default class App extends Component {
                         <Button primary lg my="2">Отправить</Button>
                         <UserList value="" />
                         <BDiv my="2">
-                            <Button success lg >Вскрываемся</Button>
+                        <Button success lg >Вскрываемся</Button>
                         </BDiv>
                         <BDiv my="2">
-                            <Button warning lg my="2">Очистить оценки</Button>
+                        <Button warning lg my="2">Очистить оценки</Button>
                         </BDiv>
                     </Container>
                 </BDiv>
