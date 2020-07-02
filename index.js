@@ -22,6 +22,9 @@ const PORT = config.get('port') || 8080
 
 app.use(cookieParser())
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+//var JSONParser = bodyParser.json()
+app.set('json spaces', 2)
+app.use(bodyParser.json())
 app.set("view engine", "ejs")
 app.use(express.static("public"))
 
@@ -104,6 +107,12 @@ app.post('/showMarks', urlencodedParser, (req, res) => {
 app.post('/fullReset', urlencodedParser, (req, res) => {
     model.fullReset()
     res.redirect("/")
+})
+
+app.get('/api/test', (req, res) => {
+    var json = [{test: 'OK'}]
+    res.set({'Content-Type': 'application/json'})
+    res.json(json)
 })
 
 app.listen(PORT)
