@@ -42,7 +42,7 @@ app.get('/', function (req, res) {
 app.post('/', urlencodedParser, (req, res) => {
     var userData = {
         name: req.body.userName,
-        isSpectator: (req.body.isSpectator === "on")
+        isSpectator: (req.body.isSpectator)
     }
     // TODO: сделать нормальную валидацию, а не проверку на пустую строку.
     if (userData.name === "") {
