@@ -63,7 +63,7 @@ app.post('/exit', urlencodedParser, (req, res) => {
 app.get('/tick', function (req, res) {
     var cookies = req.cookies
     model.tick(cookies.user)
-    res.send({
+    res.json({
         result: 1,
         users: model.serializeUsers(),
         spectators: model.serializeSpectators(),
@@ -109,9 +109,8 @@ app.post('/fullReset', urlencodedParser, (req, res) => {
     res.redirect("/")
 })
 
-app.get('/api/test', (req, res) => {
+app.get('/test', (req, res) => {
     var json = [{test: 'OK'}]
-    res.set({'Content-Type': 'application/json'})
     res.json(json)
 })
 
