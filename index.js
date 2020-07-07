@@ -39,18 +39,13 @@ app.get('/', function (req, res) {
 })
 
 // Залогиниться.
-app.post('/', urlencodedParser, (req, res) => {
+app.post('/', (req, res) => {
     var userData = {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator)
     }
-    // TODO: сделать нормальную валидацию, а не проверку на пустую строку.
-    if (userData.name === "") {
-        res.render("login", { invalidlogin: true })
-    } else {
-        res.cookie("user", userData)
-        res.render("plan", userData)
-    }
+    res.cookie("user", userData, { expires: new Date(Date.now() + 60*60*24*365*10)})
+    res.json(userData)
 })
 
 // Разлогиниться.

@@ -22,10 +22,14 @@ export default class LoginForm extends Component {
             isSpectator: this.state.isSpectator
         }
         const result = await fetch("/", {
-            method: "post",
-            body: reqBody
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(reqBody)
         })
-        console.log(result)
+        const userData = await result.json()
+        this.props.setAuthState(userData)
     }
 
     userNameChange(event) {
