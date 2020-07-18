@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Cookies from 'universal-cookie'
-import { GlobalContext } from './context/GlobalContext'
+
 import PlanningPage from './components/PlanningPage'
 import LoginForm from './components/LoginForm'
 
@@ -11,12 +11,12 @@ export default class App extends Component {
 
         const cookies = new Cookies();
         var user = cookies.get("user")
-        const isAuthenticated = user !== undefined
+        const isAuthenticated = (user !== undefined)
 
         this.state = {
             isAuthenticated: isAuthenticated,
-            isSpectator: user.isSpectator,
-            userName: user.name
+            isSpectator: isAuthenticated ? user.isSpectator : undefined,
+            userName: isAuthenticated ? user.name : undefined
         }
         this.setAuthState = this.setAuthState.bind(this)
     }
@@ -30,7 +30,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <GlobalContext.Provider value={this.state}>
+            <Fragment>
                 {this.state.isAuthenticated ? (
                     <PlanningPage />
                 )
@@ -38,7 +38,7 @@ export default class App extends Component {
                     (
                         <LoginForm setAuthState={this.setAuthState} />
                     )}
-            </GlobalContext.Provider >
+            </Fragment>
         )
     }
 }

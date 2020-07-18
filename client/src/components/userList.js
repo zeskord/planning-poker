@@ -4,14 +4,18 @@ import { ListGroup } from 'bootstrap-4-react';
 import User from './User'
 
 export default class UserList extends Component {
-  
-  
+
+  constructor(props) {
+    super(props)
+
+  }
+
   render() {
     return (
       <ListGroup my="2">
-        <User value="Пользователь 1" ></User>
-        <User value="Пользователь 2" ></User>
-        <User value="Пользователь 3" ></User>
+        {this.props.users.map(user => (
+          <User key={user.id} userName={user.name} mark={user.mark} markVisible={this.props.marksVisible}></User>
+        ))}
       </ListGroup>
     )
   }

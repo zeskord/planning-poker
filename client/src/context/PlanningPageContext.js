@@ -2,7 +2,7 @@ import {createContext} from 'react'
 
 function noop() {}
 
-export const GlobalContext = createContext({
+export const PlanningPageContext = createContext({
   name: null,
   isAuthenticated: false
 })

@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { Navbar, Nav, Collapse } from 'bootstrap-4-react';
 
 export default class NavigatonBar extends Component {
+  constructor(props) {
+    super(props)
+
+  }
+  
   render() {
     return (
       <Navbar expand="lg" light bg="light">
