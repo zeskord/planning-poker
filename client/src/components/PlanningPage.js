@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import { Container, InputGroup, Form, Button, BDiv } from 'bootstrap-4-react'
-import { PlanningPageContext } from '../context/PlanningPageContext'
 import UserList from './UserList'
 import NavigationBar from './NavigationBar'
 
@@ -16,8 +15,7 @@ export default class PlanningPage extends Component {
             userIDs: [], // Просто массив идентификаторов пользователей
             spectatorIDs: [], // Просто массив идентификаторов зрителей
             marksVisible: false, // Оценки вскрыты?
-            mark: 0, // Оценка в поле ввода
-            test: ""
+            mark: undefined // Оценка в поле ввода
         }
         this.tick = this.tick.bind(this)
         this.markChange = this.markChange.bind(this)
@@ -72,47 +70,45 @@ export default class PlanningPage extends Component {
         this.tick()
     }
 
-    async markKeyDown (event) {
-        if(event.keyCode === 13) {
+    async markKeyDown(event) {
+        if (event.keyCode === 13) {
             this.sendClick(event)
         }
     }
 
     async openClick(event) {
         const url = '/showMarks'
-        await fetch(url, {method: 'POST'})
+        await fetch(url, { method: 'POST' })
         this.tick()
     }
 
     async clearMarksClick(event) {
         const url = '/clearMarks'
-        await fetch(url, {method: 'POST'})
+        await fetch(url, { method: 'POST' })
         this.tick()
     }
 
     render() {
         return (
-            <PlanningPageContext.Provider value={this.state}>
-                <Fragment>
-                    <BDiv bg="light">
-                        <NavigationBar userName={this.state.user.name} />
-                        <Container>
-                            <InputGroup lg my="2">
-                                <InputGroup.PrependText>Оценка</InputGroup.PrependText>
-                                <Form.Input type="number" onChange={this.markChange} onKeyDown = {this.markKeyDown} />
-                            </InputGroup>
-                            <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
-                            <UserList users={this.state.users} marksVisible={this.state.marksVisible} />
-                            <BDiv my="2">
-                                <Button success lg onClick={this.openClick}>Вскрываемся</Button>
-                            </BDiv>
-                            <BDiv my="2">
-                                <Button warning lg my="2" onClick={this.clearMarksClick}>Очистить оценки</Button>
-                            </BDiv>
-                        </Container>
-                    </BDiv>
-                </Fragment>
-            </PlanningPageContext.Provider>
+            <Fragment>
+                <BDiv bg="light">
+                    <NavigationBar userName={this.state.user.name} />
+                    <Container>
+                        <InputGroup lg my="2">
+                            <InputGroup.PrependText>Оценка</InputGroup.PrependText>
+                            <Form.Input type="number" onChange={this.markChange} onKeyDown={this.markKeyDown} />
+                        </InputGroup>
+                        <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
+                        <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name}/>
+                        <BDiv my="2">
+                            <Button success lg onClick={this.openClick}>Вскрываемся</Button>
+                        </BDiv>
+                        <BDiv my="2">
+                            <Button warning lg my="2" onClick={this.clearMarksClick}>Очистить оценки</Button>
+                        </BDiv>
+                    </Container>
+                </BDiv>
+            </Fragment>
         )
     }
 }

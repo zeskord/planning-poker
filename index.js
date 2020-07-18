@@ -17,12 +17,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = config.get('port') || 8080
 
-
-
-
 app.use(cookieParser())
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-//var JSONParser = bodyParser.json()
 app.set('json spaces', 2)
 app.use(bodyParser.json())
 app.set("view engine", "ejs")
@@ -49,9 +44,9 @@ app.post('/', (req, res) => {
 })
 
 // Разлогиниться.
-app.post('/exit', urlencodedParser, (req, res) => {
+app.post('/exit', (req, res) => {
     res.clearCookie("user")
-    res.render("login", { invalidlogin: false })
+    res.status(200).send("OK")
 })
 
 // Периодический запрос от клиента.
@@ -76,32 +71,32 @@ app.get('/getUserData', function (req, res) {
         isSpectator: cookies.user.isSpectator,
         id: model.getUserID(cookies.user)
     }
-    res.send(user)
+    res.json(user)
 })
 
 // Очищает оценки.
-app.post('/clearMarks', urlencodedParser, (req, res) => {
+app.post('/clearMarks', (req, res) => {
     model.clearMarks()
-    res.send("OK")
+    res.status(200).send("OK")
 })
 
 // Регистрирует оценку от клиента.
-app.post('/sendMark', urlencodedParser, (req, res) => {
+app.post('/sendMark', (req, res) => {
     var cookies = req.cookies
     model.setMark(cookies.user, req.body.mark)
-    res.send("OK")
+    res.status(200).send("OK")
 })
 
 // Показать оценки.
-app.post('/showMarks', urlencodedParser, (req, res) => {
+app.post('/showMarks', (req, res) => {
     model.showMarks()
-    res.send("OK")
+    res.status(200).send("OK")
 })
 
 // Полный сброс модели.
-app.post('/fullReset', urlencodedParser, (req, res) => {
+app.post('/fullReset', (req, res) => {
     model.fullReset()
-    res.redirect("/")
+    res.status(200).send("OK")
 })
 
 app.get('/test', (req, res) => {

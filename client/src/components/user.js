@@ -8,13 +8,16 @@ export default class User extends Component {
   }
 
   render() {
+    var badge = undefined
+    if (!this.props.markVisible & this.props.itsMe & this.props.mark !== undefined) {
+      badge = <Badge secondary pill>{this.props.mark}</Badge>
+    } else if (this.props.markVisible) {
+      badge = <Badge primary pill>{this.props.mark}</Badge>
+    }
     return (
       <ListGroup.Item display="flex" justifyContent="between" align="items-center" success={this.props.mark !== undefined}>
         {this.props.userName}
-        {this.props.markVisible ?
-          (<Badge primary pill>{this.props.mark}</Badge>) :
-          (<Fragment></Fragment>)
-        }
+        {badge !== undefined && badge}
       </ListGroup.Item>
     )
   }

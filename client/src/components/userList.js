@@ -14,7 +14,8 @@ export default class UserList extends Component {
     return (
       <ListGroup my="2">
         {this.props.users.map(user => (
-          <User key={user.id} userName={user.name} mark={user.mark} markVisible={this.props.marksVisible}></User>
+          <User key={user.id} userName={user.name} mark={user.mark} markVisible={this.props.marksVisible}
+            itsMe={this.props.currentUserName === user.name}></User>
         ))}
       </ListGroup>
     )

@@ -4,7 +4,18 @@ import { Navbar, Nav, Collapse } from 'bootstrap-4-react';
 export default class NavigatonBar extends Component {
   constructor(props) {
     super(props)
+    this.logoutClick = this.logoutClick.bind(this)
+    this.fullReset = this.fullReset.bind(this)
+  }
 
+  async logoutClick(event) {
+    const url = '/exit'
+    await fetch(url, { method: 'POST' })
+  }
+  
+  async fullReset(event) {
+    const url = '/fullReset'
+    await fetch(url, { method: 'POST' })
   }
   
   render() {
@@ -17,10 +28,10 @@ export default class NavigatonBar extends Component {
         <Collapse navbar id="navbarSupportedContent">
           <Navbar.Nav mr="auto">
             <Nav.Item>
-              <Nav.Link href="#">Разлогиниться</Nav.Link>
+              <Nav.Link href="#" onClick = {this.logoutClick}>Разлогиниться</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="#">Полный сброс</Nav.Link>
+              <Nav.Link href="#" onClick = {this.fullReset}>Полный сброс</Nav.Link>
             </Nav.Item>
           </Navbar.Nav>
         </Collapse>
