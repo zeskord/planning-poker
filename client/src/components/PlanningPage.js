@@ -26,16 +26,20 @@ export default class PlanningPage extends Component {
     }
 
     async componentDidMount() {
-        const url = '/getUserData'
-        const response = await fetch(url)
-        const json = await response.json()
-        const user = {
-            name: json.user,
-            isSpectator: json.isSpectator
+        try {
+            const url = '/getUserData'
+            const response = await fetch(url)
+            const json = await response.json()
+            const user = {
+                name: json.user,
+                isSpectator: json.isSpectator
+            }
+            this.setState({ user: user })
+            await this.tick()
+            this.intervalID = setInterval(this.tick, 5000);
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
-        this.setState({ user: user })
-        await this.tick()
-        this.intervalID = setInterval(this.tick, 5000);
     }
 
     componentWillUnmount() {
@@ -50,7 +54,7 @@ export default class PlanningPage extends Component {
             const responseData = await response.json()
             this.setState(responseData)
         } catch (error) {
-            //console.error('Ошибка:', error);
+            console.error('Ошибка:', error);
         }
     }
 
@@ -59,20 +63,24 @@ export default class PlanningPage extends Component {
     }
 
     async sendClick(event) {
-        const url = '/sendMark'
-        const reqBody = {
-            user: this.state.user.name,
-            mark: this.state.mark
+        try {
+            const url = '/sendMark'
+            const reqBody = {
+                user: this.state.user.name,
+                mark: this.state.mark
+            }
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(reqBody)
+            })
+            await response.text()
+            this.tick()
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(reqBody)
-        })
-        await response.text()
-        this.tick()
     }
 
     async markKeyUp(event) {
@@ -82,15 +90,23 @@ export default class PlanningPage extends Component {
     }
 
     async openClick(event) {
-        const url = '/showMarks'
-        await fetch(url, { method: 'POST' })
-        this.tick()
+        try {
+            const url = '/showMarks'
+            await fetch(url, { method: 'POST' })
+            this.tick()
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     }
 
     async clearMarksClick(event) {
-        const url = '/clearMarks'
-        await fetch(url, { method: 'POST' })
-        this.tick()
+        try {
+            const url = '/clearMarks'
+            await fetch(url, { method: 'POST' })
+            this.tick()
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     }
 
     render() {
