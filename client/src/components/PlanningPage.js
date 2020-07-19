@@ -28,7 +28,12 @@ export default class PlanningPage extends Component {
     async componentDidMount() {
         try {
             const url = '/getUserData'
-            const response = await fetch(url)
+            const response = await fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
             const json = await response.json()
             const user = {
                 name: json.user,
