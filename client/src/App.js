@@ -21,10 +21,11 @@ export default class App extends Component {
         this.setAuthState = this.setAuthState.bind(this)
     }
 
-    setAuthState(userData) {
+    setAuthState(userData, isAuthenticated) {
+        console.log(this.state.isAuthenticated)
         this.setState({
             userName: userData.name,
-            isAuthenticated: true
+            isAuthenticated: isAuthenticated
         })
     }
 
@@ -32,7 +33,7 @@ export default class App extends Component {
         return (
             <Fragment>
                 {this.state.isAuthenticated ? (
-                    <PlanningPage />
+                    <PlanningPage setAuthState={this.setAuthState}/>
                 )
                     :
                     (

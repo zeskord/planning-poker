@@ -12,6 +12,7 @@ export default class LoginForm extends Component {
         }
 
         this.loginclick = this.loginclick.bind(this)
+        this.loginKeyUp = this.loginKeyUp.bind(this)
         this.userNameChange = this.userNameChange.bind(this)
         this.isSpectatorChange = this.isSpectatorChange.bind(this)
     }
@@ -29,7 +30,13 @@ export default class LoginForm extends Component {
             body: JSON.stringify(reqBody)
         })
         const userData = await result.json()
-        this.props.setAuthState(userData)
+        this.props.setAuthState(userData, true)
+    }
+
+    loginKeyUp(event) {
+        if (event.keyCode === 13) {
+            this.loginclick()
+        }
     }
 
     userNameChange(event) {
@@ -47,7 +54,8 @@ export default class LoginForm extends Component {
                     <label htmlFor="userName">Введите ваше имя</label>
                 </InputGroup>
                 <InputGroup mb="3">
-                    <Form.Input lg type="text" id="userName" value={this.state.userName} onChange={this.userNameChange} placeholder="Имя пользователя" />
+                    <Form.Input lg type="text" id="userName" value={this.state.userName} onChange={this.userNameChange}
+                        onKeyUp={this.loginKeyUp} placeholder="Имя пользователя" />
                 </InputGroup>
                 <Form.Check mb="3">
                     <Form.CheckInput type="checkbox" id="isSpectator" value={this.state.isSpectator} onChange={this.isSpectatorChange} />

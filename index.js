@@ -20,7 +20,6 @@ const PORT = config.get('port') || 8080
 app.use(cookieParser())
 app.set('json spaces', 2)
 app.use(bodyParser.json())
-app.set("view engine", "ejs")
 app.use(express.static("public"))
 
 // Начало.
@@ -44,7 +43,11 @@ app.post('/', (req, res) => {
 })
 
 // Разлогиниться.
-app.post('/exit', (req, res) => {
+app.post('/logOut', (req, res) => {
+    var cookies = req.cookies
+    // Сначала удаляем пользователя из модели.
+    model.delUser(cookies.user.name)
+    // Затем очищаем Cookie у пользователя на клиенте.
     res.clearCookie("user")
     res.status(200).send("OK")
 })

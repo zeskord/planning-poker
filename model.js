@@ -90,15 +90,13 @@ model.userExists = function (userName) {
 }
 
 model.delUser = function (userName) {
-
     this.users.delete(userName)
-
+    console.log(`Пользователь ${userName} удален`)
 }
 
 model.delSpectator = function (userName) {
-
     this.spectators.delete(userName)
-
+    console.log(`Наблюдатель ${userName} удален`)
 }
 
 model.clearMarks = function () {
@@ -200,8 +198,7 @@ model.deleteInactiveUsers = function () {
                 mark: user.mark
             }
             model.registeredUsers.set(name, registeredUser)
-            model.users.delete(name)
-            console.log("Пользователь " + name + " удален")
+            model.delUser(name)
         }
     }
 
@@ -211,8 +208,7 @@ model.deleteInactiveUsers = function () {
                 id: user.id
             }
             model.registeredSpectators.set(name, registeredSpectator)
-            model.spectators.delete(name)
-            console.log("Наблюдатель " + name + " удален")
+            model.delSpectator(name)
         }
     }
 

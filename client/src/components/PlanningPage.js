@@ -22,7 +22,7 @@ export default class PlanningPage extends Component {
         this.sendClick = this.sendClick.bind(this)
         this.openClick = this.openClick.bind(this)
         this.clearMarksClick = this.clearMarksClick.bind(this)
-        this.markKeyDown = this.markKeyDown.bind(this)
+        this.markKeyUp = this.markKeyUp.bind(this)
     }
 
     async componentDidMount() {
@@ -34,6 +34,7 @@ export default class PlanningPage extends Component {
             isSpectator: json.isSpectator
         }
         this.setState({ user: user })
+        await this.tick()
         this.intervalID = setInterval(this.tick, 5000);
     }
 
@@ -43,10 +44,14 @@ export default class PlanningPage extends Component {
 
     // Глобальный клиентский тик. 
     async tick() {
-        const url = '/tick'
-        const response = await fetch(url)
-        const responseData = await response.json()
-        this.setState(responseData)
+        try {
+            const url = '/tick'
+            const response = await fetch(url)
+            const responseData = await response.json()
+            this.setState(responseData)
+        } catch (error) {
+            //console.error('Ошибка:', error);
+        }
     }
 
     markChange(event) {
@@ -70,7 +75,7 @@ export default class PlanningPage extends Component {
         this.tick()
     }
 
-    async markKeyDown(event) {
+    async markKeyUp(event) {
         if (event.keyCode === 13) {
             this.sendClick(event)
         }
@@ -92,14 +97,14 @@ export default class PlanningPage extends Component {
         return (
             <Fragment>
                 <BDiv bg="light">
-                    <NavigationBar userName={this.state.user.name} />
+                    <NavigationBar userName={this.state.user.name} setAuthState={this.props.setAuthState} />
                     <Container>
                         <InputGroup lg my="2">
                             <InputGroup.PrependText>Оценка</InputGroup.PrependText>
-                            <Form.Input type="number" onChange={this.markChange} onKeyDown={this.markKeyDown} />
+                            <Form.Input type="number" onChange={this.markChange} onKeyUp={this.markKeyUp} />
                         </InputGroup>
                         <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
-                        <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name}/>
+                        <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name} />
                         <BDiv my="2">
                             <Button success lg onClick={this.openClick}>Вскрываемся</Button>
                         </BDiv>
