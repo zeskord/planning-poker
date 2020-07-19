@@ -23,14 +23,14 @@ app.use(bodyParser.json())
 app.use(express.static("public"))
 
 // Начало.
-app.get('/', function (req, res) {
-    var cookies = req.cookies
-    if (cookies.user === undefined) {
-        res.render("login", { invalidlogin: false })
-    } else {
-        res.render("plan", cookies.user)
-    }
-})
+// app.get('/', function (req, res) {
+//     var cookies = req.cookies
+//     if (cookies.user === undefined) {
+//         res.render("login", { invalidlogin: false })
+//     } else {
+//         res.render("plan", cookies.user)
+//     }
+// })
 
 // Залогиниться.
 app.post('/', (req, res) => {
