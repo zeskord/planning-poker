@@ -22,7 +22,6 @@ export default class App extends Component {
     }
 
     setAuthState(userData, isAuthenticated) {
-        console.log(this.state.isAuthenticated)
         this.setState({
             userName: userData.name,
             isAuthenticated: isAuthenticated
