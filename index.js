@@ -15,22 +15,12 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = config.get('port') || 8080
+const PORT = config.get('port') || 8081
 
 app.use(cookieParser())
 app.set('json spaces', 2)
 app.use(bodyParser.json())
 app.use(express.static("public"))
-
-// Начало.
-// app.get('/', function (req, res) {
-//     var cookies = req.cookies
-//     if (cookies.user === undefined) {
-//         res.render("login", { invalidlogin: false })
-//     } else {
-//         res.render("plan", cookies.user)
-//     }
-// })
 
 // Залогиниться.
 app.post('/', (req, res) => {
