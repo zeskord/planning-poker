@@ -59,6 +59,7 @@ app.get('/tick', function (req, res) {
 // Просто вернуть данные пользователя с сервера на клиент.
 app.get('/getUserData', function (req, res) {
     var cookies = req.cookies
+    console.log(cookies)
     var user = {
         user: cookies.user.name,
         isSpectator: cookies.user.isSpectator,
