@@ -7,16 +7,6 @@ const model = require("./model")
 var cookieParser = require('cookie-parser')
 const app = express()
 
-if (process.env.NODE_ENV === 'production') {
-    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
-}
-
-const PORT = config.get('port') || 8081
-
 app.use(cookieParser())
 app.set('json spaces', 2)
 app.use(bodyParser.json())
@@ -59,7 +49,6 @@ app.get('/tick', function (req, res) {
 // Просто вернуть данные пользователя с сервера на клиент.
 app.get('/getUserData', function (req, res) {
     var cookies = req.cookies
-    console.log(cookies)
     var user = {
         user: cookies.user.name,
         isSpectator: cookies.user.isSpectator,
@@ -97,6 +86,16 @@ app.get('/test', (req, res) => {
     var json = [{test: 'OK'}]
     res.json(json)
 })
+
+if (process.env.NODE_ENV === 'production') {
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
+
+const PORT = config.get('port') || 8081
 
 app.listen(PORT)
 
