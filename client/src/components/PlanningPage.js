@@ -41,9 +41,9 @@ export default class PlanningPage extends Component {
             }
             this.setState({ user: user })
             await this.tick()
-            this.intervalID = setInterval(this.tick, 5000);
+            this.intervalID = setInterval(this.tick, 2000);
         } catch (error) {
-            throw (error)
+            console.error('Ошибка:', error);
         }
     }
 
