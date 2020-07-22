@@ -95,7 +95,7 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = config.get('port') || 8081
+const PORT = config.get('port') || 8080
 
 app.listen(PORT)
 
