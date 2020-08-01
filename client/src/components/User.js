@@ -15,7 +15,7 @@ export default class User extends Component {
       badge = <Badge primary pill>{this.props.mark}</Badge>
     }
     return (
-      <ListGroup.Item key={this.props.key} display="flex" justifyContent="between" align="items-center"
+      <ListGroup.Item key={this.props.id} display="flex" justifyContent="between" align="items-center"
         success={this.props.mark !== undefined}>
         {this.props.userName}
         {badge !== undefined && badge}

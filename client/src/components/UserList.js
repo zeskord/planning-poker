@@ -11,11 +11,12 @@ export default class UserList extends Component {
   }
 
   render() {
+    var props = this.props
     return (
       <ListGroup my="2">
-        {this.props.users.map(user => (
-          <User key={user.id} userName={user.name} mark={user.mark} markVisible={this.props.marksVisible}
-            itsMe={this.props.currentUserName === user.name}></User>
+        {props.users.map(user => (
+          <User key={user.id} id={user.id} userName={user.name} mark={user.mark} markVisible={props.marksVisible}
+            itsMe={props.currentUserName === user.name}></User>
         ))}
       </ListGroup>
     )
