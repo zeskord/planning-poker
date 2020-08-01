@@ -116,25 +116,23 @@ export default class PlanningPage extends Component {
 
     render() {
         return (
-            <Fragment>
-                <BDiv bg="light">
-                    <NavigationBar userName={this.state.user.name} setAuthState={this.props.setAuthState} />
-                    <Container>
-                        <InputGroup lg my="2">
-                            <InputGroup.PrependText>Оценка</InputGroup.PrependText>
-                            <Form.Input type="number" onChange={this.markChange} onKeyUp={this.markKeyUp} />
-                        </InputGroup>
-                        <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
-                        <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name} />
-                        <BDiv my="2">
-                            <Button success lg onClick={this.openClick}>Вскрываемся</Button>
-                        </BDiv>
-                        <BDiv my="2">
-                            <Button warning lg my="2" onClick={this.clearMarksClick}>Очистить оценки</Button>
-                        </BDiv>
-                    </Container>
-                </BDiv>
-            </Fragment>
+            <BDiv bg="light">
+                <NavigationBar userName={this.state.user.name} setAuthState={this.props.setAuthState} />
+                <Container>
+                    <InputGroup lg my="2">
+                        <InputGroup.PrependText>Оценка</InputGroup.PrependText>
+                        <Form.Input type="number" onChange={this.markChange} onKeyUp={this.markKeyUp} />
+                    </InputGroup>
+                    <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
+                    <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name} />
+                    <BDiv my="2">
+                        <Button success lg onClick={this.openClick}>Вскрываемся</Button>
+                    </BDiv>
+                    <BDiv my="2">
+                        <Button warning lg my="2" onClick={this.clearMarksClick}>Очистить оценки</Button>
+                    </BDiv>
+                </Container>
+            </BDiv>
         )
     }
 }
