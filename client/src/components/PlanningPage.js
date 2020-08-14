@@ -125,7 +125,7 @@ export default class PlanningPage extends Component {
                     </InputGroup>
                     <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
                     <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name} />
-                    <BDiv my="2">
+                    <BDiv pt="2">
                         <Button success lg onClick={this.openClick}>Вскрываемся</Button>
                     </BDiv>
                     <BDiv my="2">

@@ -1,7 +1,7 @@
 const express = require('express')
 const config = require('config')
 const path = require('path')
-const bodyParser = require("body-parser")
+//const bodyParser = require("body-parser")
 const model = require("./model")
 
 var cookieParser = require('cookie-parser')
@@ -9,7 +9,7 @@ const app = express()
 
 app.use(cookieParser())
 app.set('json spaces', 2)
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(express.static("public"))
 
 // Залогиниться.
