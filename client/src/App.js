@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import Cookies from 'universal-cookie'
-
+import { BDiv } from 'bootstrap-4-react'
 import PlanningPage from './components/PlanningPage'
 import LoginForm from './components/LoginForm'
 
@@ -29,16 +29,20 @@ export default class App extends Component {
     }
 
     render() {
+        const style = {
+            minWidth: '100vw',
+            minHeight: '100vh'
+        }
         return (
-            <Fragment>
+            <BDiv bg="light" style={style}>
                 {this.state.isAuthenticated ? (
-                    <PlanningPage setAuthState={this.setAuthState}/>
+                    <PlanningPage setAuthState={this.setAuthState} />
                 )
                     :
                     (
                         <LoginForm setAuthState={this.setAuthState} />
                     )}
-            </Fragment>
+            </BDiv>
         )
     }
 }
