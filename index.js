@@ -1,7 +1,6 @@
 const express = require('express')
 const config = require('config')
 const path = require('path')
-//const bodyParser = require("body-parser")
 const model = require("./model")
 
 var cookieParser = require('cookie-parser')
