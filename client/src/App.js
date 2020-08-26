@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Cookies from 'universal-cookie'
 import { BDiv } from 'bootstrap-4-react'
 import PlanningPage from './components/PlanningPage'
-import LoginForm from './components/LoginForm'
+import {LoginForm} from './components/LoginForm'
 
 export default class App extends Component {
 

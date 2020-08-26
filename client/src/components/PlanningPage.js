@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Container, InputGroup, Form, Button, BDiv } from 'bootstrap-4-react'
-import UserList from './UserList'
-import NavigationBar from './NavigationBar'
+import { UserList } from './UserList'
+import {NavigationBar} from './NavigationBar'
 
 export default class PlanningPage extends Component {
 

@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Container, InputGroup, Form, Button } from 'bootstrap-4-react';
 
-export default class LoginForm extends Component {
+export const LoginForm = (props) => {
 
-    constructor(props) {
-        super(props);
+    var userName = ""
+    var isSpectator = false
 
-        this.state = {
-            userName: "",
-            isSpectator: false
-        }
+    const [state, setState] = useState({
+        userName: "",
+        isSpectator: false
+    });
 
-        this.loginclick = this.loginclick.bind(this)
-        this.loginKeyUp = this.loginKeyUp.bind(this)
-        this.userNameChange = this.userNameChange.bind(this)
-        this.isSpectatorChange = this.isSpectatorChange.bind(this)
-    }
-
-    async loginclick() {
+    async function loginclick() {
         const reqBody = {
-            userName: this.state.userName,
-            isSpectator: this.state.isSpectator
+            userName: state.userName,
+            isSpectator: state.isSpectator
         }
         const result = await fetch("/", {
             method: 'POST',
@@ -30,41 +24,55 @@ export default class LoginForm extends Component {
             body: JSON.stringify(reqBody)
         })
         const userData = await result.json()
-        this.props.setAuthState(userData, true)
+        props.setAuthState(userData, true)
     }
 
-    loginKeyUp(event) {
+    function loginKeyUp(event) {
         if (event.keyCode === 13) {
-            this.loginclick()
+            loginclick()
         }
     }
 
-    userNameChange(event) {
-        this.setState({ userName: event.target.value });
+    function userNameChange(event) {
+
+        userName = event.target.value
+        setState(prev => {
+            return {
+                ...prev,
+                userName: userName
+            }
+        })
     }
 
-    isSpectatorChange(event) {
-        this.setState({ isSpectator: event.target.value });
+
+    function isSpectatorChange(event) {
+
+        isSpectator = event.target.value
+        setState(prev => {
+            return {
+                ...prev,
+                isSpectator: isSpectator
+            }
+        })
     }
 
-    render() {
-        return (
-            <Container>
-                <InputGroup>
-                    <label htmlFor="userName">Введите ваше имя</label>
-                </InputGroup>
-                <InputGroup mb="3">
-                    <Form.Input lg type="text" id="userName" value={this.state.userName} onChange={this.userNameChange}
-                        onKeyUp={this.loginKeyUp} placeholder="Имя пользователя" />
-                </InputGroup>
-                <Form.Check mb="3">
-                    <Form.CheckInput type="checkbox" id="isSpectator" value={this.state.isSpectator} onChange={this.isSpectatorChange} />
-                    <Form.CheckLabel htmlFor="isSpectator">Я только посмотреть</Form.CheckLabel>
-                </Form.Check>
-                <InputGroup mb="3">
-                    <Button primary onClick={this.loginclick}>Войти</Button>
-                </InputGroup>
-            </Container >
-        )
-    }
+    return (
+        <Container>
+            <InputGroup>
+                <label htmlFor="userName">Введите ваше имя</label>
+            </InputGroup>
+            <InputGroup mb="3">
+                <Form.Input lg type="text" id="userName" value={state.userName} onChange={userNameChange}
+                    onKeyUp={loginKeyUp} placeholder="Имя пользователя" />
+            </InputGroup>
+            <Form.Check mb="3">
+                <Form.CheckInput type="checkbox" id="isSpectator" value={state.isSpectator} onChange={isSpectatorChange} />
+                <Form.CheckLabel htmlFor="isSpectator">Я только посмотреть</Form.CheckLabel>
+            </Form.Check>
+            <InputGroup mb="3">
+                <Button primary onClick={loginclick}>Войти</Button>
+            </InputGroup>
+        </Container >
+    )
+
 }
