@@ -1,31 +1,36 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Container, InputGroup, Form, Button, BDiv } from 'bootstrap-4-react'
 import { UserList } from './UserList'
-import {NavigationBar} from './NavigationBar'
+import { NavigationBar } from './NavigationBar'
 
-export default class PlanningPage extends Component {
+export const PlanningPage = (props) => {
 
-    constructor(props) {
-        super(props)
-        // Инициализируем клиентский стейт.
-        this.state = {
-            user: {}, // name, isSpectator
-            users: [], // Пользователи со всеми данными.
-            spectators: [], // Зрители со всеми данными.
-            userIDs: [], // Просто массив идентификаторов пользователей
-            spectatorIDs: [], // Просто массив идентификаторов зрителей
-            marksVisible: false, // Оценки вскрыты?
-            mark: undefined // Оценка в поле ввода
-        }
-        this.tick = this.tick.bind(this)
-        this.markChange = this.markChange.bind(this)
-        this.sendClick = this.sendClick.bind(this)
-        this.openClick = this.openClick.bind(this)
-        this.clearMarksClick = this.clearMarksClick.bind(this)
-        this.markKeyUp = this.markKeyUp.bind(this)
-    }
+    const intervalID = useRef(undefined)
 
-    async componentDidMount() {
+    const [userState, setUserState] = useState({
+        user: {} // name, isSpectator
+    })
+    const [markState, setMarkState] = useState({
+        mark: undefined
+    })
+    const [state, setState] = useState({
+        users: [], // Пользователи со всеми данными.
+        spectators: [], // Зрители со всеми данными.
+        userIDs: [], // Просто массив идентификаторов пользователей
+        spectatorIDs: [], // Просто массив идентификаторов зрителей
+        marksVisible: false, // Оценки вскрыты?
+    })
+
+    useEffect(
+        () => {
+            // Запрашиваем с сервера, как он видит текущего пользователя.
+            // Устанавливаем обработчик ожидания tick.
+            getUserData()
+            return () => { clearInterval(intervalID.current) }
+        }, [props]
+    )
+
+    async function getUserData() {
         try {
             const url = '/getUserData'
             const response = await fetch(url, {
@@ -39,40 +44,55 @@ export default class PlanningPage extends Component {
                 name: json.user,
                 isSpectator: json.isSpectator
             }
-            this.setState({ user: user })
-            await this.tick()
-            this.intervalID = setInterval(this.tick, 2000);
+            setUserState(prev => {
+                return {
+                    ...prev,
+                    user: user
+                }
+            })
+            await tick()
+            intervalID.current = setInterval(tick, 2000);
         } catch (error) {
             console.error('Ошибка:', error);
         }
     }
 
-    componentWillUnmount() {
-        clearInterval(this.intervalID);
-    }
-
     // Глобальный клиентский тик. 
-    async tick() {
+    async function tick() {
         try {
             const url = '/tick'
             const response = await fetch(url)
             const responseData = await response.json()
-            this.setState(responseData)
+            setState(prev => {
+                return {
+                    ...prev,
+                    users: responseData.users,
+                    spectators: responseData.spectators,
+                    marksVisible: responseData.marksVisible
+                }
+            })
         } catch (error) {
             console.error('Ошибка:', error);
         }
     }
 
-    markChange(event) {
-        this.setState({ mark: event.target.value })
+    function markChange(event) {
+        var mark_temp = event.target.value
+
+        setMarkState(prev => {
+            return {
+                ...prev,
+                mark: mark_temp
+            }
+        })
     }
 
-    async sendClick(event) {
+    async function sendClick(event) {
         try {
             const url = '/sendMark'
             const reqBody = {
-                user: this.state.user.name,
-                mark: this.state.mark
+                user: userState.user.name,
+                mark: markState.mark
             }
             const response = await fetch(url, {
                 method: 'POST',
@@ -82,57 +102,55 @@ export default class PlanningPage extends Component {
                 body: JSON.stringify(reqBody)
             })
             await response.text()
-            this.tick()
+            tick()
         } catch (error) {
             console.error('Ошибка:', error);
         }
     }
 
-    async markKeyUp(event) {
+    async function markKeyUp(event) {
         if (event.keyCode === 13) {
-            this.sendClick(event)
+            sendClick(event)
         }
     }
 
-    async openClick(event) {
+    async function openClick(event) {
         try {
             const url = '/showMarks'
             await fetch(url, { method: 'POST' })
-            this.tick()
+            tick()
         } catch (error) {
             console.error('Ошибка:', error);
         }
     }
 
-    async clearMarksClick(event) {
+    async function clearMarksClick(event) {
         try {
             const url = '/clearMarks'
             await fetch(url, { method: 'POST' })
-            this.tick()
+            tick()
         } catch (error) {
             console.error('Ошибка:', error);
         }
     }
 
-    render() {
-        return (
-            <BDiv bg="light">
-                <NavigationBar userName={this.state.user.name} setAuthState={this.props.setAuthState} />
-                <Container>
-                    <InputGroup lg my="2">
-                        <InputGroup.PrependText>Оценка</InputGroup.PrependText>
-                        <Form.Input type="number" onChange={this.markChange} onKeyUp={this.markKeyUp} />
-                    </InputGroup>
-                    <Button primary lg my="2" onClick={this.sendClick}>Отправить</Button>
-                    <UserList users={this.state.users} marksVisible={this.state.marksVisible} currentUserName={this.state.user.name} />
-                    <BDiv pt="2">
-                        <Button success lg onClick={this.openClick}>Вскрываемся</Button>
-                    </BDiv>
-                    <BDiv my="2">
-                        <Button warning lg my="2" onClick={this.clearMarksClick}>Очистить оценки</Button>
-                    </BDiv>
-                </Container>
-            </BDiv>
-        )
-    }
+    return (
+        <BDiv bg="light">
+            <NavigationBar userName={userState.user.name} setAuthState={props.setAuthState} />
+            <Container>
+                <InputGroup lg my="2">
+                    <InputGroup.PrependText>Оценка</InputGroup.PrependText>
+                    <Form.Input type="number" onChange={markChange} onKeyUp={markKeyUp} />
+                </InputGroup>
+                <Button primary lg my="2" onClick={sendClick}>Отправить</Button>
+                <UserList users={state.users} marksVisible={state.marksVisible} currentUserName={userState.user.name} />
+                <BDiv pt="2">
+                    <Button success lg onClick={openClick}>Вскрываемся</Button>
+                </BDiv>
+                <BDiv my="2">
+                    <Button warning lg my="2" onClick={clearMarksClick}>Очистить оценки</Button>
+                </BDiv>
+            </Container>
+        </BDiv>
+    )
 }

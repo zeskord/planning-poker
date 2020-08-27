@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navbar, Nav, Collapse } from 'bootstrap-4-react';
+import React from 'react'
+import { Navbar, Nav, Collapse } from 'bootstrap-4-react'
 
 export const NavigationBar = (props) => {
 
@@ -7,7 +7,11 @@ export const NavigationBar = (props) => {
     const url = '/logOut'
     await fetch(url, { method: 'POST' })
     // Процедура, переданная из самого корня.
-    props.setAuthState({ name: undefined }, false)
+    const userData = {
+      userName: undefined,
+      isAuthenticated: false
+    }
+    props.setAuthState(userData)
   }
 
   async function fullReset(event) {

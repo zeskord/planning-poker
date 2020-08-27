@@ -23,8 +23,12 @@ export const LoginForm = (props) => {
             },
             body: JSON.stringify(reqBody)
         })
-        const userData = await result.json()
-        props.setAuthState(userData, true)
+        const userDataFromServer = await result.json()
+        const userData = {
+            userName: userDataFromServer.name,
+            isAuthenticated: true
+        }
+        props.setAuthState(userData)
     }
 
     function loginKeyUp(event) {
