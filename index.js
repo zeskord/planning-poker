@@ -17,7 +17,10 @@ app.post('/', (req, res) => {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator)
     }
-    res.cookie("user", userData, { expires: new Date(Date.now() + 60*60*24*365*10)})
+    res.cookie("user", userData, {
+        expires: new Date(Date.now() + 315360000),
+        maxAge: new Date(Date.now() + 315360000)
+    })
     res.json(userData)
 })
 
@@ -82,7 +85,7 @@ app.post('/fullReset', (req, res) => {
 })
 
 app.get('/test', (req, res) => {
-    var json = [{test: 'OK'}]
+    var json = [{ test: 'OK' }]
     res.json(json)
 })
 
