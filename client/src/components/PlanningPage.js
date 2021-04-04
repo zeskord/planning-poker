@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, InputGroup, Form, Button, BDiv, Badge } from "bootstrap-4-react";
+import {
+  Container,
+  InputGroup,
+  Form,
+  Button,
+  BDiv,
+  Badge,
+  BImg,
+} from "bootstrap-4-react";
 import { UserList } from "./UserList";
 import { NavigationBar } from "./NavigationBar";
 //import { PopoverHelp } from './PopoverHelp'
@@ -153,6 +161,7 @@ export const PlanningPage = (props) => {
           marksVisible={state.marksVisible}
           currentUserName={userState.user.name}
         />
+        <BImg my="2" src={state.marksVisible ? "eye.svg" : "eye-slash.svg"} width="24" height="24" />
         <BDiv pt="2">
           <Button success lg onClick={openClick}>
             Вскрываемся

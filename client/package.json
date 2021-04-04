@@ -9,7 +9,7 @@
     "bootstrap-4-react": "0.0.59",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-scripts": "^4.0.1",
+    "react-scripts": "^4.0.3",
     "universal-cookie": "^4.0.4"
   },
   "scripts": {
