@@ -158,7 +158,18 @@ export const PlanningPage = (props) => {
     console.log("modalOnHide")
     setShow(false)
   }
-
+  
+  async function modalOnSelect(selectedValue) {
+    console.log(selectedValue)
+    setShow(false)
+    setMarkState((prev) => {
+      return {
+        ...prev,
+        mark: selectedValue,
+      };
+    });
+    await sendClick(undefined)
+  }
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -178,6 +189,7 @@ export const PlanningPage = (props) => {
             type="number"
             onChange={markChange}
             onKeyUp={markKeyUp}
+            value={markState.mark}
           />
           <InputGroup.Append>
             <Button
@@ -252,11 +264,11 @@ export const PlanningPage = (props) => {
         </Modal.Header>
         <Modal.Body>
           <CardDeck>
-            <PokerCard variant="primary" key="1" title = "0"/>
-            <PokerCard variant="primary" key="2" title = "0.5"/>
-            <PokerCard variant="primary" key="3" title = "1"/>
+            <PokerCard variant="primary" key="1" title = "0" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="2" title = "0.5" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="3" title = "1"  onClick={modalOnSelect}/>
           </CardDeck>
-          <CardDeck>
+          {/* <CardDeck>
             <PokerCard variant="primary" key="4" title = "2"/>
             <PokerCard variant="primary" key="5" title = "3"/>
             <PokerCard variant="primary" key="6" title = "5"/>
@@ -270,7 +282,7 @@ export const PlanningPage = (props) => {
             <PokerCard variant="primary" key="10" title = "34"/>
             <PokerCard variant="primary" key="11" title = "55"/>
             <PokerCard variant="primary" key="12" title = "89"/>
-          </CardDeck>
+          </CardDeck> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
