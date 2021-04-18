@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Container,
-  InputGroup,
-  Form,
-  Button,
-  BDiv,
-  Badge,
-  BImg,
-} from "bootstrap-4-react";
+import Container from "react-bootstrap/Container";
+import InputGroup from "react-bootstrap/InputGroup";
+import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
+import Image from "react-bootstrap/Image";
+import FormControl from "react-bootstrap/FormControl";
 import { UserList } from "./UserList";
 import { NavigationBar } from "./NavigationBar";
-//import { PopoverHelp } from './PopoverHelp'
+import { PokerCard } from "./PokerCard";
+// import Modal from "react-bootstrap/Modal";
+import Modal from "react-bootstrap/Modal";
+import CardDeck from "react-bootstrap/CardDeck";
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
@@ -18,9 +18,13 @@ export const PlanningPage = (props) => {
   const [userState, setUserState] = useState({
     user: {}, // name, isSpectator
   });
+
   const [markState, setMarkState] = useState({
     mark: undefined,
   });
+
+  const [show, setShow] = useState(false);
+
   const [state, setState] = useState({
     users: [], // Пользователи со всеми данными.
     spectators: [], // Зрители со всеми данными.
@@ -142,18 +146,55 @@ export const PlanningPage = (props) => {
     }
   }
 
+  async function markSelect(event) {
+    try {
+      setShow(true);
+    } catch (error) {
+      console.error("Ошибка:", error);
+    }
+  }
+
+  async function modalOnHide() {
+    console.log("modalOnHide")
+    setShow(false)
+  }
+
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
-    <BDiv bg="light">
+    <div bg="light">
       <NavigationBar
         userName={userState.user.name}
         setAuthState={props.setAuthState}
       />
       <Container>
-        <InputGroup lg my="2">
-          <InputGroup.PrependText>Оценка</InputGroup.PrependText>
-          <Form.Input type="number" onChange={markChange} onKeyUp={markKeyUp} />
+        <InputGroup className="my-2" size="lg">
+          <InputGroup.Prepend>
+            <InputGroup.Text>Оценка</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            type="number"
+            onChange={markChange}
+            onKeyUp={markKeyUp}
+          />
+          <InputGroup.Append>
+            <Button
+              id="basic-addon2"
+              variant="secondary"
+              onClick={markSelect}
+            >
+              . . .
+            </Button>
+          </InputGroup.Append>
         </InputGroup>
-        <Button primary lg my="2" onClick={sendClick}>
+        <Button
+          variant="primary"
+          size="lg"
+          className="my-2"
+          onClick={sendClick}
+        >
           Отправить
         </Button>
         <UserList
@@ -161,34 +202,85 @@ export const PlanningPage = (props) => {
           marksVisible={state.marksVisible}
           currentUserName={userState.user.name}
         />
-        <BImg my="2" src={state.marksVisible ? "eye.svg" : "eye-slash.svg"} width="24" height="24" />
-        <BDiv pt="2">
-          <Button success lg onClick={openClick}>
+        <Image
+          className="my-2"
+          src={state.marksVisible ? "eye.svg" : "eye-slash.svg"}
+          // width="24"
+          // height="24"
+        />
+        <div className="pt-2">
+          <Button variant="success" size="lg" onClick={openClick}>
             Вскрываемся
           </Button>
-        </BDiv>
-        <BDiv my="2">
-          <Button warning lg my="2" onClick={clearMarksClick}>
+        </div>
+        <div className="my-2">
+          <Button
+            variant="warning"
+            size="lg"
+            className="my-2"
+            onClick={clearMarksClick}
+          >
             Очистить оценки
           </Button>
-        </BDiv>
-        <BDiv my="2">
-          <Badge primary>0</Badge>
-          <Badge secondary>0.5</Badge>
-          <Badge success>1</Badge>
-          <Badge danger>2</Badge>
-          <Badge warning>3</Badge>
-          <Badge info>5</Badge>
-          <Badge primary>8</Badge>
-          <Badge secondary>13</Badge>
-          <Badge success>21</Badge>
-          <Badge danger>34</Badge>
-          <Badge warning>55</Badge>
-          <Badge info>89</Badge>
-          <Badge primary>144</Badge>
-          <Badge secondary>233</Badge>
-        </BDiv>
+        </div>
+        <div className="my-2">
+          <Badge variant="primary">0</Badge>
+          <Badge variant="secondary">0.5</Badge>
+          <Badge variant="success">1</Badge>
+          <Badge variant="danger">2</Badge>
+          <Badge variant="warning">3</Badge>
+          <Badge variant="info">5</Badge>
+          <Badge variant="primary">8</Badge>
+          <Badge variant="secondary">13</Badge>
+          <Badge variant="success">21</Badge>
+          <Badge variant="danger">34</Badge>
+          <Badge variant="warning">55</Badge>
+          <Badge variant="info">89</Badge>
+          <Badge variant="primary">144</Badge>
+          <Badge variant="secondary">233</Badge>
+        </div>
       </Container>
-    </BDiv>
+      
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Выбор оценки</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CardDeck>
+            <PokerCard variant="primary" key="1" title = "0"/>
+            <PokerCard variant="primary" key="2" title = "0.5"/>
+            <PokerCard variant="primary" key="3" title = "1"/>
+          </CardDeck>
+          <CardDeck>
+            <PokerCard variant="primary" key="4" title = "2"/>
+            <PokerCard variant="primary" key="5" title = "3"/>
+            <PokerCard variant="primary" key="6" title = "5"/>
+          </CardDeck>
+          <CardDeck>
+            <PokerCard variant="primary" key="7" title = "8"/>
+            <PokerCard variant="primary" key="8" title = "13"/>
+            <PokerCard variant="primary" key="9" title = "21"/>
+          </CardDeck>
+          <CardDeck>
+            <PokerCard variant="primary" key="10" title = "34"/>
+            <PokerCard variant="primary" key="11" title = "55"/>
+            <PokerCard variant="primary" key="12" title = "89"/>
+          </CardDeck>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Закрыть
+          </Button>
+          <Button variant="primary">Выбрать</Button>
+        </Modal.Footer>
+      </Modal>
+
+
+    </div>
   );
 };

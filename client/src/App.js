@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import Cookies from 'universal-cookie'
-import { BDiv } from 'bootstrap-4-react'
+// import { BDiv } from 'bootstrap-4-react'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import {div} from 'react-bootstrap/div'
 
 export const App = (props) => {
 
@@ -22,7 +24,7 @@ export const App = (props) => {
     })
 
     return (
-        <BDiv bg="light" style={style}>
+        <div bg="light" style={style}>
             {AuthState.isAuthenticated ? (
                 <PlanningPage setAuthState={setAuthState} />
             )
@@ -30,6 +32,6 @@ export const App = (props) => {
                 (
                     <LoginForm setAuthState={setAuthState} />
                 )}
-        </BDiv>
+        </div>
     )
 }

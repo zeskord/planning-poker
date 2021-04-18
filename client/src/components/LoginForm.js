@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Container, InputGroup, Form, Button } from 'bootstrap-4-react';
+import Container from "react-bootstrap/Container";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormCheck from "react-bootstrap/FormCheck";
+import FormCheckInput from "react-bootstrap/FormCheckInput";
+import FormCheckLabel from "react-bootstrap/FormCheckLabel";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
 
 export const LoginForm = (props) => {
 
@@ -62,20 +68,46 @@ export const LoginForm = (props) => {
 
     return (
         <Container>
-            <InputGroup>
+            <InputGroup className="mb-3">
+                <FormControl
+                placeholder="Введите ваше имя"
+                aria-label="Username"
+                aria-describedby="basic-addon1"
+                size="lg"
+                type="text"
+                id="userName"
+                value={state.userName}
+                onChange={userNameChange}
+                onKeyUp={loginKeyUp}
+                />
+            </InputGroup>
+
+            <FormCheck className="mb-3">
+                <FormCheckInput
+                type="checkbox"
+                id="isSpectator"
+                value={state.isSpectator}
+                onChange={isSpectatorChange}
+                />
+                <FormCheckLabel htmlFor="isSpectator">Я только посмотреть</FormCheckLabel>
+            </FormCheck>
+            <InputGroup className="mb-3">
+                <Button variant="primary" onClick={loginclick}>Войти</Button>
+            </InputGroup>
+            {/* <InputGroup>
                 <label htmlFor="userName">Введите ваше имя</label>
             </InputGroup>
-            <InputGroup mb="3">
-                <Form.Input lg type="text" id="userName" value={state.userName} onChange={userNameChange}
+            <InputGroup className="mb-3">
+                <Form.Input size="lg" type="text" id="userName" value={state.userName} onChange={userNameChange}
                     onKeyUp={loginKeyUp} placeholder="Имя пользователя" />
             </InputGroup>
-            <Form.Check mb="3">
+            <FormCheck className="mb-3">
                 <Form.CheckInput type="checkbox" id="isSpectator" value={state.isSpectator} onChange={isSpectatorChange} />
                 <Form.CheckLabel htmlFor="isSpectator">Я только посмотреть</Form.CheckLabel>
-            </Form.Check>
-            <InputGroup mb="3">
-                <Button primary onClick={loginclick}>Войти</Button>
-            </InputGroup>
+            </FormCheck>
+            <InputGroup className="mb-3">
+                <Button variant="primary" onClick={loginclick}>Войти</Button>
+            </InputGroup> */}
         </Container >
     )
 
