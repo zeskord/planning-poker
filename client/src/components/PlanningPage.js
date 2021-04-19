@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Container from "react-bootstrap/Container";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import Badge from "react-bootstrap/Badge";
+// import Badge from "react-bootstrap/Badge";
 import Image from "react-bootstrap/Image";
 import FormControl from "react-bootstrap/FormControl";
 import { UserList } from "./UserList";
@@ -114,7 +114,7 @@ export const PlanningPage = (props) => {
         body: JSON.stringify(reqBody),
       });
       await response.text();
-      tick();
+      await tick();
     } catch (error) {
       console.error("Ошибка:", error);
     }
@@ -154,22 +154,23 @@ export const PlanningPage = (props) => {
     }
   }
 
-  async function modalOnHide() {
-    console.log("modalOnHide")
-    setShow(false)
-  }
+  // async function modalOnHide() {
+  //   console.log("modalOnHide")
+  //   setShow(false)
+  // }
   
   async function modalOnSelect(selectedValue) {
     console.log(selectedValue)
     setShow(false)
-    setMarkState((prev) => {
-      return {
-        ...prev,
-        mark: selectedValue,
-      };
-    });
-    await sendClick(undefined)
+    await setMarkState({mark: selectedValue})
+    sendClick(undefined)
+    
+    
   }
+
+  // async function setMarkState(selectedValue) {
+  //   {mark: mark_temp};
+  // });
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -235,7 +236,7 @@ export const PlanningPage = (props) => {
             Очистить оценки
           </Button>
         </div>
-        <div className="my-2">
+        {/* <div className="my-2">
           <Badge variant="primary">0</Badge>
           <Badge variant="secondary">0.5</Badge>
           <Badge variant="success">1</Badge>
@@ -250,7 +251,7 @@ export const PlanningPage = (props) => {
           <Badge variant="info">89</Badge>
           <Badge variant="primary">144</Badge>
           <Badge variant="secondary">233</Badge>
-        </div>
+        </div> */}
       </Container>
       
       <Modal
@@ -288,7 +289,7 @@ export const PlanningPage = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Закрыть
           </Button>
-          <Button variant="primary">Выбрать</Button>
+          {/* <Button variant="primary">Выбрать</Button> */}
         </Modal.Footer>
       </Modal>
 
