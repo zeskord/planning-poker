@@ -9,7 +9,7 @@ export const PokerCard = (props) => {
 
     return (
         <Card 
-        className="mb-2 text-center"
+        className="my-2 text-center"
         bg={props.variant.toLowerCase()}
         key={props.key}
         // variant="top"
@@ -19,7 +19,8 @@ export const PokerCard = (props) => {
         >
         {/* <Card.Header>Header</Card.Header> */}
         <Card.Body>
-            <Card.Title>{props.title}</Card.Title>
+            <Card.Title className="align-middle"
+            style={{ fontSize: '2rem' }}>{props.title}</Card.Title>
             {/* <Card.Text>
                 {props.as}
             </Card.Text> */}

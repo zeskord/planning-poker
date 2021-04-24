@@ -28,6 +28,8 @@ export const PlanningPage = (props) => {
   // Показывается ли в текущий момент модальное окно выбора оценки.
   const [show, setShow] = useState(false);
 
+  const [marksVisible, setMarksVisible] = useState(false)
+
   const [state, setState] = useState({
     users: [], // Пользователи со всеми данными.
     spectators: [], // Зрители со всеми данными.
@@ -46,13 +48,31 @@ export const PlanningPage = (props) => {
   }, [props]);
 
   useEffect(() => {
-    console.log("useEffect mark")
-    sendMark()
+    // undefined - это когда происходит очистка оценок.
+    if (mark !== undefined) {
+      sendMark()
+    }
   }, [mark]);
 
   useEffect(() => {
-    console.log("useEffect markClient")
+    // console.log("useEffect markClient")
   }, [markClient]);
+
+  // Возникает, когда на сервере меняется таблица пользователей.
+  useEffect(() => {
+    // console.log("useEffect state ", state)
+
+    var myUserDataOnServer = state.users.find(us => us.name === userState.user.name)
+    if ((myUserDataOnServer !== undefined)
+      &&(myUserDataOnServer.mark === undefined)
+      &&(mark !== undefined)) {
+      setMark(undefined)
+    }
+    
+    // if (marksVisible === false) {
+    //   setMark(undefined)
+    // }
+  }, [state]);
 
   async function getUserData() {
     try {
@@ -95,6 +115,8 @@ export const PlanningPage = (props) => {
           marksVisible: responseData.marksVisible,
         };
       });
+      // console.log("tick marksVisible", responseData.marksVisible)
+      setMarksVisible(responseData.marksVisible)
     } catch (error) {
       console.error("Ошибка:", error);
     }
@@ -107,7 +129,7 @@ export const PlanningPage = (props) => {
 
   async function sendMark() {
     try {
-      console.log("sendMark()")
+      // console.log("sendMark()")
       const url = "/sendMark";
       const reqBody = {
         user: userState.user.name,
@@ -126,11 +148,6 @@ export const PlanningPage = (props) => {
     } catch (error) {
       console.error("Ошибка:", error);
     }
-  }
-
-  async function sendClick(event) {
-    // Актуализация значения отправленной на сервре оценки.
-    setMark(markClient)
   }
 
   async function markKeyUp(event) {
@@ -220,12 +237,12 @@ export const PlanningPage = (props) => {
         </Button>
         <UserList
           users={state.users}
-          marksVisible={state.marksVisible}
+          marksVisible={marksVisible}
           currentUserName={userState.user.name}
         />
         <Image
           className="my-2"
-          src={state.marksVisible ? "eye.svg" : "eye-slash.svg"}
+          src={marksVisible ? "eye.svg" : "eye-slash.svg"}
           // width="24"
           // height="24"
         />
@@ -261,21 +278,21 @@ export const PlanningPage = (props) => {
             <PokerCard variant="primary" key="2" title = "0.5" onClick={modalOnSelect}/>
             <PokerCard variant="primary" key="3" title = "1"  onClick={modalOnSelect}/>
           </CardDeck>
-          {/* <CardDeck>
-            <PokerCard variant="primary" key="4" title = "2"/>
-            <PokerCard variant="primary" key="5" title = "3"/>
-            <PokerCard variant="primary" key="6" title = "5"/>
+          <CardDeck>
+            <PokerCard variant="primary" key="4" title = "2" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="5" title = "3" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="6" title = "5" onClick={modalOnSelect}/>
           </CardDeck>
           <CardDeck>
-            <PokerCard variant="primary" key="7" title = "8"/>
-            <PokerCard variant="primary" key="8" title = "13"/>
-            <PokerCard variant="primary" key="9" title = "21"/>
+            <PokerCard variant="primary" key="7" title = "8" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="8" title = "13" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="9" title = "21" onClick={modalOnSelect}/>
           </CardDeck>
           <CardDeck>
-            <PokerCard variant="primary" key="10" title = "34"/>
-            <PokerCard variant="primary" key="11" title = "55"/>
-            <PokerCard variant="primary" key="12" title = "89"/>
-          </CardDeck> */}
+            <PokerCard variant="primary" key="10" title = "34" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="11" title = "55" onClick={modalOnSelect}/>
+            <PokerCard variant="primary" key="12" title = "89" onClick={modalOnSelect}/>
+          </CardDeck>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
