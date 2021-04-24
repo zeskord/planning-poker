@@ -2,27 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import Container from "react-bootstrap/Container";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-// import Badge from "react-bootstrap/Badge";
 import Image from "react-bootstrap/Image";
 import FormControl from "react-bootstrap/FormControl";
 import { UserList } from "./UserList";
 import { NavigationBar } from "./NavigationBar";
 import { PokerCard } from "./PokerCard";
-// import Modal from "react-bootstrap/Modal";
 import Modal from "react-bootstrap/Modal";
 import CardDeck from "react-bootstrap/CardDeck";
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
 
+  // Стейт текущего пользователя.
   const [userState, setUserState] = useState({
     user: {}, // name, isSpectator
   });
 
-  const [markState, setMarkState] = useState({
-    mark: undefined,
-  });
+  // Оценка, которая была отправлена на сервер. При изменении обязательно должна
+  // отправиться на сервер.
+  const [mark, setMark] = useState(undefined);
 
+  // Оценка, которая изменяется в поле ввода, но не обязательно отправлялась на сервер.
+  const [markClient, setMarkClient] = useState(undefined)
+
+  // Показывается ли в текущий момент модальное окно выбора оценки.
   const [show, setShow] = useState(false);
 
   const [state, setState] = useState({
@@ -41,6 +44,15 @@ export const PlanningPage = (props) => {
       clearInterval(intervalID.current);
     };
   }, [props]);
+
+  useEffect(() => {
+    console.log("useEffect mark")
+    sendMark()
+  }, [mark]);
+
+  useEffect(() => {
+    console.log("useEffect markClient")
+  }, [markClient]);
 
   async function getUserData() {
     try {
@@ -90,22 +102,18 @@ export const PlanningPage = (props) => {
 
   function markChange(event) {
     var mark_temp = event.target.value;
-
-    setMarkState((prev) => {
-      return {
-        ...prev,
-        mark: mark_temp,
-      };
-    });
+    setMarkClient(mark_temp);
   }
 
-  async function sendClick(event) {
+  async function sendMark() {
     try {
+      console.log("sendMark()")
       const url = "/sendMark";
       const reqBody = {
         user: userState.user.name,
-        mark: markState.mark,
+        mark: markClient, // на сервер отправляем клиентскую оценку.
       };
+      // console.log(reqBody)
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -120,9 +128,14 @@ export const PlanningPage = (props) => {
     }
   }
 
+  async function sendClick(event) {
+    // Актуализация значения отправленной на сервре оценки.
+    setMark(markClient)
+  }
+
   async function markKeyUp(event) {
     if (event.keyCode === 13) {
-      sendClick(event);
+      sendMark();
     }
   }
 
@@ -154,24 +167,19 @@ export const PlanningPage = (props) => {
     }
   }
 
-  // async function modalOnHide() {
-  //   console.log("modalOnHide")
-  //   setShow(false)
-  // }
-  
   async function modalOnSelect(selectedValue) {
-    console.log(selectedValue)
     setShow(false)
-    await setMarkState({mark: selectedValue})
-    sendClick(undefined)
     
-    
+    var mark_temp = selectedValue;
+    setMarkClient(mark_temp)
+    setMark(mark_temp) // Сразу будет отправлено.
+  }  
+
+  async function changeMark() {
+    await setMark(markClient)
   }
 
-  // async function setMarkState(selectedValue) {
-  //   {mark: mark_temp};
-  // });
-
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -190,7 +198,7 @@ export const PlanningPage = (props) => {
             type="number"
             onChange={markChange}
             onKeyUp={markKeyUp}
-            value={markState.mark}
+            value={markClient}
           />
           <InputGroup.Append>
             <Button
@@ -206,7 +214,7 @@ export const PlanningPage = (props) => {
           variant="primary"
           size="lg"
           className="my-2"
-          onClick={sendClick}
+          onClick={changeMark}
         >
           Отправить
         </Button>
@@ -236,22 +244,6 @@ export const PlanningPage = (props) => {
             Очистить оценки
           </Button>
         </div>
-        {/* <div className="my-2">
-          <Badge variant="primary">0</Badge>
-          <Badge variant="secondary">0.5</Badge>
-          <Badge variant="success">1</Badge>
-          <Badge variant="danger">2</Badge>
-          <Badge variant="warning">3</Badge>
-          <Badge variant="info">5</Badge>
-          <Badge variant="primary">8</Badge>
-          <Badge variant="secondary">13</Badge>
-          <Badge variant="success">21</Badge>
-          <Badge variant="danger">34</Badge>
-          <Badge variant="warning">55</Badge>
-          <Badge variant="info">89</Badge>
-          <Badge variant="primary">144</Badge>
-          <Badge variant="secondary">233</Badge>
-        </div> */}
       </Container>
       
       <Modal
