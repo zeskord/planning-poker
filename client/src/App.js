@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import Cookies from 'universal-cookie'
-// import { BDiv } from 'bootstrap-4-react'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import {div} from 'react-bootstrap/div'
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import './darktheme.css';
 
 export const App = (props) => {
 
