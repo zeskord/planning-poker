@@ -23,7 +23,7 @@ export const App = (props) => {
     })
 
     return (
-        <div bg="light" style={style}>
+        <div className="bg-light" style={style}>
             {AuthState.isAuthenticated ? (
                 <PlanningPage setAuthState={setAuthState} />
             )

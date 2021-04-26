@@ -215,7 +215,7 @@ export const PlanningPage = (props) => {
             type="number"
             onChange={markChange}
             onKeyUp={markKeyUp}
-            value={markClient}
+            value={markClient||''}
           />
           <InputGroup.Append>
             <Button

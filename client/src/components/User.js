@@ -6,9 +6,9 @@ export const User = (props) => {
 
   var badge = undefined
   if (!props.markVisible & props.itsMe & props.mark !== undefined) {
-    badge = <Badge variant="secondary" pill className="my-1">{props.mark}</Badge>
+    badge = <Badge variant="secondary" pill className="mt-1">{props.mark}</Badge>
   } else if (props.markVisible) {
-    badge = <Badge variant="primary" pill className="my-1">{props.mark}</Badge>
+    badge = <Badge variant="primary" pill className="mt-1">{props.mark}</Badge>
   }
 
   return (
