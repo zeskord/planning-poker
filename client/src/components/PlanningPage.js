@@ -5,10 +5,12 @@ import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import FormControl from "react-bootstrap/FormControl";
 import { UserList } from "./UserList";
+import { SpectatorList } from "./SpectatorList";
 import { NavigationBar } from "./NavigationBar";
 import { PokerCard } from "./PokerCard";
 import Modal from "react-bootstrap/Modal";
 import CardDeck from "react-bootstrap/CardDeck";
+import Card from "react-bootstrap/Card";
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
@@ -23,12 +25,12 @@ export const PlanningPage = (props) => {
   const [mark, setMark] = useState(undefined);
 
   // Оценка, которая изменяется в поле ввода, но не обязательно отправлялась на сервер.
-  const [markClient, setMarkClient] = useState(undefined)
+  const [markClient, setMarkClient] = useState(undefined);
 
   // Показывается ли в текущий момент модальное окно выбора оценки.
   const [show, setShow] = useState(false);
 
-  const [marksVisible, setMarksVisible] = useState(false)
+  const [marksVisible, setMarksVisible] = useState(false);
 
   const [state, setState] = useState({
     users: [], // Пользователи со всеми данными.
@@ -37,6 +39,8 @@ export const PlanningPage = (props) => {
     spectatorIDs: [], // Просто массив идентификаторов зрителей
     marksVisible: false, // Оценки вскрыты?
   });
+
+  const [spectators, setSpectators] = useState({ list: [] });
 
   useEffect(() => {
     // Запрашиваем с сервера, как он видит текущего пользователя.
@@ -50,7 +54,7 @@ export const PlanningPage = (props) => {
   useEffect(() => {
     // undefined - это когда происходит очистка оценок.
     if (mark !== undefined) {
-      sendMark()
+      sendMark();
     }
   }, [mark]);
 
@@ -62,13 +66,17 @@ export const PlanningPage = (props) => {
   useEffect(() => {
     // console.log("useEffect state ", state)
 
-    var myUserDataOnServer = state.users.find(us => us.name === userState.user.name)
-    if ((myUserDataOnServer !== undefined)
-      &&(myUserDataOnServer.mark === undefined)
-      &&(mark !== undefined)) {
-      setMark(undefined)
+    var myUserDataOnServer = state.users.find(
+      (us) => us.name === userState.user.name
+    );
+    if (
+      myUserDataOnServer !== undefined &&
+      myUserDataOnServer.mark === undefined &&
+      mark !== undefined
+    ) {
+      setMark(undefined);
     }
-    
+
     // if (marksVisible === false) {
     //   setMark(undefined)
     // }
@@ -111,12 +119,15 @@ export const PlanningPage = (props) => {
         return {
           ...prev,
           users: responseData.users,
-          spectators: responseData.spectators,
-          marksVisible: responseData.marksVisible,
         };
       });
-      // console.log("tick marksVisible", responseData.marksVisible)
-      setMarksVisible(responseData.marksVisible)
+      setSpectators((prev) => {
+        return {
+          ...prev,
+          list: responseData.spectators,
+        };
+      });
+      setMarksVisible(responseData.marksVisible);
     } catch (error) {
       console.error("Ошибка:", error);
     }
@@ -185,18 +196,17 @@ export const PlanningPage = (props) => {
   }
 
   async function modalOnSelect(selectedValue) {
-    setShow(false)
-    
-    var mark_temp = selectedValue;
-    setMarkClient(mark_temp)
-    setMark(mark_temp) // Сразу будет отправлено.
-  }  
+    setShow(false);
 
-  async function changeMark() {
-    await setMark(markClient)
+    var mark_temp = selectedValue;
+    setMarkClient(mark_temp);
+    setMark(mark_temp); // Сразу будет отправлено.
   }
 
-  
+  async function changeMark() {
+    await setMark(markClient);
+  }
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -215,14 +225,10 @@ export const PlanningPage = (props) => {
             type="number"
             onChange={markChange}
             onKeyUp={markKeyUp}
-            value={markClient||''}
+            value={markClient || ""}
           />
           <InputGroup.Append>
-            <Button
-              id="basic-addon2"
-              variant="secondary"
-              onClick={markSelect}
-            >
+            <Button id="basic-addon2" variant="secondary" onClick={markSelect}>
               . . .
             </Button>
           </InputGroup.Append>
@@ -261,8 +267,19 @@ export const PlanningPage = (props) => {
             Очистить оценки
           </Button>
         </div>
+        {spectators.list.length !== 0 && (
+          <Card className="my-4">
+            <Card.Header>Зрители</Card.Header>
+            <Card.Body>
+              <SpectatorList
+                className="my-2 px-2"
+                spectators={spectators.list}
+              />
+            </Card.Body>
+          </Card>
+        )}
       </Container>
-      
+
       <Modal
         show={show}
         onHide={handleClose}
@@ -274,24 +291,84 @@ export const PlanningPage = (props) => {
         </Modal.Header>
         <Modal.Body>
           <CardDeck>
-            <PokerCard variant="primary" key="1" title = "0" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="2" title = "0.5" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="3" title = "1"  onClick={modalOnSelect}/>
+            <PokerCard
+              variant="primary"
+              key="1"
+              title="0"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="2"
+              title="0.5"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="3"
+              title="1"
+              onClick={modalOnSelect}
+            />
           </CardDeck>
           <CardDeck>
-            <PokerCard variant="primary" key="4" title = "2" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="5" title = "3" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="6" title = "5" onClick={modalOnSelect}/>
+            <PokerCard
+              variant="primary"
+              key="4"
+              title="2"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="5"
+              title="3"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="6"
+              title="5"
+              onClick={modalOnSelect}
+            />
           </CardDeck>
           <CardDeck>
-            <PokerCard variant="primary" key="7" title = "8" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="8" title = "13" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="9" title = "21" onClick={modalOnSelect}/>
+            <PokerCard
+              variant="primary"
+              key="7"
+              title="8"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="8"
+              title="13"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="9"
+              title="21"
+              onClick={modalOnSelect}
+            />
           </CardDeck>
           <CardDeck>
-            <PokerCard variant="primary" key="10" title = "34" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="11" title = "55" onClick={modalOnSelect}/>
-            <PokerCard variant="primary" key="12" title = "89" onClick={modalOnSelect}/>
+            <PokerCard
+              variant="primary"
+              key="10"
+              title="34"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="11"
+              title="55"
+              onClick={modalOnSelect}
+            />
+            <PokerCard
+              variant="primary"
+              key="12"
+              title="89"
+              onClick={modalOnSelect}
+            />
           </CardDeck>
         </Modal.Body>
         <Modal.Footer>
@@ -301,8 +378,6 @@ export const PlanningPage = (props) => {
           {/* <Button variant="primary">Выбрать</Button> */}
         </Modal.Footer>
       </Modal>
-
-
     </div>
   );
 };
