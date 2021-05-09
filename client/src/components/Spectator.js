@@ -1,13 +1,12 @@
 import React from 'react';
-import ListGroup from "react-bootstrap/ListGroup";
 
 export const Spectator = (props) => {
 
   return (
-    <ListGroup.Item key={props.id} display="flex" align="items-center" className="py-1 justify-content-between" variant="light">
+    <li className="list-group-item justify-content-between align-items-center py-1" key={props.id}>
         <div className="d-flex justify-content-between">
           {props.userName}
         </div>
-    </ListGroup.Item>
+    </li>
   )
 }

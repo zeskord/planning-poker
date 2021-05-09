@@ -1,31 +1,26 @@
-import React from 'react';
-import Card from "react-bootstrap/Card";
+import React from "react";
 
 export const PokerCard = (props) => {
+  async function onClick() {
+    await props.modalOnSelect(props.title);
+  }
 
-    async function onClick() {
-        await props.onClick(props.title)
-      }
-
-    return (
-        <Card 
-        className="my-2 text-center"
-        bg={props.variant.toLowerCase()}
-        key={props.key}
-        // variant="top"
-        text={props.variant.toLowerCase() === "light" ? "dark" : "white"}
-        style={{ width: "18rem" }}
-        onClick={onClick}
+  return (
+    <div
+      className="card my-2 text-center"
+      style={{ width: "18rem" }}
+      onClick={onClick}
+    >
+      <div className="card-body">
+        <h5
+          className="card-title align-middle"
+          data-bs-toggle="modal"
+          data-bs-target="#myModal"
+          style={{ fontSize: "2rem" }}
         >
-        {/* <Card.Header>Header</Card.Header> */}
-        <Card.Body>
-            <Card.Title className="align-middle"
-            style={{ fontSize: '2rem' }}>{props.title}</Card.Title>
-            {/* <Card.Text>
-                {props.as}
-            </Card.Text> */}
-        </Card.Body>
-        </Card>
-       )
-    }
-       
+          {props.title}
+        </h5>
+      </div>
+    </div>
+  );
+};

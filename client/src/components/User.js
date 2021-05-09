@@ -1,23 +1,21 @@
 import React from 'react';
-import ListGroup from "react-bootstrap/ListGroup";
-import Badge from "react-bootstrap/Badge";
 
 export const User = (props) => {
 
   var badge = undefined
   if (!props.markVisible & props.itsMe & props.mark !== undefined) {
-    badge = <Badge variant="secondary" pill className="mt-1">{props.mark}</Badge>
+    badge = <span className="badge rounded-pill bg-secondary mt-1">{props.mark}</span>
   } else if (props.markVisible) {
-    badge = <Badge variant="primary" pill className="mt-1">{props.mark}</Badge>
+    badge = <span className="badge rounded-pill bg-primary mt-1">{props.mark}</span>
   }
+  var liClass = "list-group-item justify-content-between align-items-center" + (  props.mark !== undefined ? " list-group-item-success" : "")
 
   return (
-    <ListGroup.Item key={props.id} display="flex" align="items-center" className="justify-content-between"
-      variant={(  props.mark !== undefined ? "success" : "")}>
-        <div className="d-flex justify-content-between">
+    <li className={liClass} key={props.id}>
+        <div className="d-flex justify-content-between my-1">
           {props.userName}
           {badge !== undefined && badge}
         </div>
-    </ListGroup.Item>
+    </li>
   )
 }

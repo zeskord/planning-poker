@@ -1,11 +1,4 @@
 import React, { useState } from 'react';
-import Container from "react-bootstrap/Container";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormCheck from "react-bootstrap/FormCheck";
-import FormCheckInput from "react-bootstrap/FormCheckInput";
-import FormCheckLabel from "react-bootstrap/FormCheckLabel";
-import FormControl from "react-bootstrap/FormControl";
-import Button from "react-bootstrap/Button";
 
 export const LoginForm = (props) => {
 
@@ -67,48 +60,41 @@ export const LoginForm = (props) => {
     }
 
     return (
-        <Container>
-            <InputGroup className="mb-3">
-                <FormControl
-                placeholder="Введите ваше имя"
-                aria-label="Username"
-                aria-describedby="basic-addon1"
-                size="lg"
-                type="text"
-                id="userName"
-                value={state.userName}
-                onChange={userNameChange}
-                onKeyUp={loginKeyUp}
-                />
-            </InputGroup>
+      <div className="container-sm">
+        <div className="input-group mb-3">
+          <input
+            class="form-control form-control-lg"
+            placeholder="Введите ваше имя"
+            aria-label="Username"
+            aria-describedby="basic-addon1"
+            type="text"
+            id="userName"
+            value={state.userName}
+            onChange={userNameChange}
+            onKeyUp={loginKeyUp}
+          />
+        </div>
 
-            <FormCheck className="mb-3">
-                <FormCheckInput
-                type="checkbox"
-                id="isSpectator"
-                value={state.isSpectator}
-                onChange={isSpectatorChange}
-                />
-                <FormCheckLabel htmlFor="isSpectator">Я только посмотреть</FormCheckLabel>
-            </FormCheck>
-            <InputGroup className="mb-3">
-                <Button variant="primary" onClick={loginclick}>Войти</Button>
-            </InputGroup>
-            {/* <InputGroup>
-                <label htmlFor="userName">Введите ваше имя</label>
-            </InputGroup>
-            <InputGroup className="mb-3">
-                <Form.Input size="lg" type="text" id="userName" value={state.userName} onChange={userNameChange}
-                    onKeyUp={loginKeyUp} placeholder="Имя пользователя" />
-            </InputGroup>
-            <FormCheck className="mb-3">
-                <Form.CheckInput type="checkbox" id="isSpectator" value={state.isSpectator} onChange={isSpectatorChange} />
-                <Form.CheckLabel htmlFor="isSpectator">Я только посмотреть</Form.CheckLabel>
-            </FormCheck>
-            <InputGroup className="mb-3">
-                <Button variant="primary" onClick={loginclick}>Войти</Button>
-            </InputGroup> */}
-        </Container >
-    )
+        <div className="input-group mb-3">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="isSpectator"
+              value={state.isSpectator}
+              onChange={isSpectatorChange}
+            />
+            <label class="form-check-label" htmlFor="isSpectator">
+              Я только посмотреть
+            </label>
+          </div>
+        </div>
+        <div className="input-group mb-3">
+          <button className="btn btn-primary" onClick={loginclick}>
+            Войти
+          </button>
+        </div>
+      </div>
+    );
 
 }

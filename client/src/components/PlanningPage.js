@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import Container from "react-bootstrap/Container";
-import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
-import FormControl from "react-bootstrap/FormControl";
 import { UserList } from "./UserList";
 import { SpectatorList } from "./SpectatorList";
 import { NavigationBar } from "./NavigationBar";
-import { PokerCard } from "./PokerCard";
-import Modal from "react-bootstrap/Modal";
-import CardDeck from "react-bootstrap/CardDeck";
-import Card from "react-bootstrap/Card";
+import { PokerCards } from "./PokerCards";
+import {Modal} from "bootstrap"
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
@@ -197,7 +190,6 @@ export const PlanningPage = (props) => {
 
   async function modalOnSelect(selectedValue) {
     setShow(false);
-
     var mark_temp = selectedValue;
     setMarkClient(mark_temp);
     setMark(mark_temp); // Сразу будет отправлено.
@@ -216,168 +208,113 @@ export const PlanningPage = (props) => {
         userName={userState.user.name}
         setAuthState={props.setAuthState}
       />
-      <Container>
-        <InputGroup className="my-2" size="lg">
-          <InputGroup.Prepend>
-            <InputGroup.Text>Оценка</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
+      <div className="container-sm">
+        <div className="input-group input-group-lg my-2">
+          <span className="input-group-text">Оценка</span>
+          <input
             type="number"
+            className="form-control"
             onChange={markChange}
             onKeyUp={markKeyUp}
             value={markClient || ""}
-          />
-          <InputGroup.Append>
-            <Button id="basic-addon2" variant="secondary" onClick={markSelect}>
-              . . .
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-        <Button
-          variant="primary"
-          size="lg"
-          className="my-2"
+          ></input>
+          <button
+            className="btn btn-secondary"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#myModal"
+            // id="button-addon2"
+            onClick={markSelect}
+          >
+            . . .
+          </button>
+        </div>
+        <button
+          type="button"
+          className="btn btn-primary btn-lg my-2"
           onClick={changeMark}
         >
           Отправить
-        </Button>
+        </button>
         <UserList
           users={state.users}
           marksVisible={marksVisible}
           currentUserName={userState.user.name}
         />
-        <Image
+        <img
           className="my-2"
           src={marksVisible ? "eye.svg" : "eye-slash.svg"}
           // width="24"
           // height="24"
         />
         <div className="pt-2">
-          <Button variant="success" size="lg" onClick={openClick}>
+          <button
+            type="button"
+            className="btn btn-success btn-lg"
+            onClick={openClick}
+          >
             Вскрываемся
-          </Button>
+          </button>
         </div>
         <div className="my-2">
-          <Button
-            variant="warning"
-            size="lg"
-            className="my-2"
+          <button
+            type="button"
+            className="btn btn-warning btn-lg my-2"
             onClick={clearMarksClick}
           >
             Очистить оценки
-          </Button>
+          </button>
         </div>
         {spectators.list.length !== 0 && (
-          <Card className="my-4">
-            <Card.Header>Зрители</Card.Header>
-            <Card.Body>
+          <div className="card my-4">
+            <div className="card-header">Зрители</div>
+            <div className="card-body">
               <SpectatorList
                 className="my-2 px-2"
                 spectators={spectators.list}
               />
-            </Card.Body>
-          </Card>
+            </div>
+          </div>
         )}
-      </Container>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
+      </div>
+      <div
+        className={"modal fade"}
+        id="myModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        aria-hidden={!show}
+        // aria-hidden="false"
+        // onHide={handleClose}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Выбор оценки</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <CardDeck>
-            <PokerCard
-              variant="primary"
-              key="1"
-              title="0"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="2"
-              title="0.5"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="3"
-              title="1"
-              onClick={modalOnSelect}
-            />
-          </CardDeck>
-          <CardDeck>
-            <PokerCard
-              variant="primary"
-              key="4"
-              title="2"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="5"
-              title="3"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="6"
-              title="5"
-              onClick={modalOnSelect}
-            />
-          </CardDeck>
-          <CardDeck>
-            <PokerCard
-              variant="primary"
-              key="7"
-              title="8"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="8"
-              title="13"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="9"
-              title="21"
-              onClick={modalOnSelect}
-            />
-          </CardDeck>
-          <CardDeck>
-            <PokerCard
-              variant="primary"
-              key="10"
-              title="34"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="11"
-              title="55"
-              onClick={modalOnSelect}
-            />
-            <PokerCard
-              variant="primary"
-              key="12"
-              title="89"
-              onClick={modalOnSelect}
-            />
-          </CardDeck>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Закрыть
-          </Button>
-          {/* <Button variant="primary">Выбрать</Button> */}
-        </Modal.Footer>
-      </Modal>
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Выбор оценки</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Закрыть"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <PokerCards modalOnSelect={modalOnSelect}/>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary btn-lg my-2"
+                data-bs-dismiss="modal"
+                onClick={handleClose}
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,11 +1,10 @@
 // Представляет список активных пользователей.
 import React from "react";
-import ListGroup from "react-bootstrap/ListGroup";
 import { User } from "./User";
 
 export const UserList = (props) => {
   return (
-    <ListGroup className="my-2">
+    <ul className="list-group my-2">
       {props.users.map((user) => (
         <User
           key={user.id}
@@ -16,6 +15,6 @@ export const UserList = (props) => {
           itsMe={props.currentUserName === user.name}
         ></User>
       ))}
-    </ListGroup>
+    </ul>
   );
 };
