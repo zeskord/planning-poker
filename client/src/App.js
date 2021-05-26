@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import Cookies from 'universal-cookie'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import './darktheme.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import socket from './socket'
 
 export const App = (props) => {
 
@@ -12,9 +11,11 @@ export const App = (props) => {
         minHeight: '100vh'
     }
 
-    const cookies = new Cookies();
-    var user = cookies.get("user")
-    const isAuthenticated = (user !== undefined)
+    var user = {
+        name: localStorage.getItem("name"),
+        isSpectator: localStorage.getItem("isSpectator")
+    }
+    const isAuthenticated = (user.name !== null)
 
     const [AuthState, setAuthState] = useState({
         isAuthenticated: isAuthenticated,

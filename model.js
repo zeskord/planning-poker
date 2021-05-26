@@ -233,7 +233,7 @@ model.getUserID = function (userData) {
     } else {
         var collection = this.registeredSpectators
     }
-    var user = collection.get(userData.name)
+    var user = collection.get(userData.userName)
     if (user === undefined) {
         return undefined
     } else {

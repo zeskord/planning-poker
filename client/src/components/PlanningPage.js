@@ -3,7 +3,7 @@ import { UserList } from "./UserList";
 import { SpectatorList } from "./SpectatorList";
 import { NavigationBar } from "./NavigationBar";
 import { PokerCards } from "./PokerCards";
-import {Modal} from "bootstrap"
+import socket from '../socket'
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
@@ -38,7 +38,7 @@ export const PlanningPage = (props) => {
   useEffect(() => {
     // Запрашиваем с сервера, как он видит текущего пользователя.
     // Устанавливаем обработчик ожидания tick.
-    getUserData();
+    // getUserData();
     return () => {
       clearInterval(intervalID.current);
     };

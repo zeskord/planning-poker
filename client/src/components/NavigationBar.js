@@ -1,15 +1,29 @@
 import React from "react";
+import socket from "../socket";
 
 export const NavigationBar = (props) => {
   async function logoutClick(event) {
-    const url = "/logOut";
-    await fetch(url, { method: "POST" });
-    // Процедура, переданная из самого корня.
-    const userData = {
-      userName: undefined,
-      isAuthenticated: false,
-    };
-    props.setAuthState(userData);
+    // const url = "/logOut";
+    // await fetch(url, { method: "POST" });
+    // // Процедура, переданная из самого корня.
+    // const userData = {
+    //   userName: undefined,
+    //   isAuthenticated: false,
+    // };
+    var reqBody = {userName: localStorage.getItem("name")};
+
+    socket.emit("logout", reqBody, (response) => {
+      if (response.status === "ok") {
+        localStorage.removeItem("userName");
+        localStorage.removeItem("isSpectator");
+
+        props.setAuthState({
+          userName: null,
+          isSpectator: null,
+          isAuthenticated: false,
+        });
+      }
+    });
   }
 
   async function fullReset(event) {

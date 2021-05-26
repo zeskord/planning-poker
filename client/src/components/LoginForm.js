@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import socket from '../socket'
 
 export const LoginForm = (props) => {
 
@@ -11,23 +12,38 @@ export const LoginForm = (props) => {
     });
 
     async function loginclick() {
-        const reqBody = {
-            userName: state.userName,
-            isSpectator: state.isSpectator
-        }
-        const result = await fetch("/", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(reqBody)
-        })
-        const userDataFromServer = await result.json()
-        const userData = {
-            userName: userDataFromServer.name,
+      const reqBody = {
+                  userName: state.userName,
+                  isSpectator: state.isSpectator
+              }
+      // var userData = {
+      //   userName: state.userName,
+      //   isSpectator: state.isSpectator
+      // }
+      socket.emit('login', reqBody,
+        (response) => {
+          console.log(response.status); // ok
+          localStorage.setItem("userName", reqBody.userName)
+          localStorage.setItem("isSpectator", reqBody.isSpectator)
+
+          const userData = {
+            userName: reqBody.userName,
+            isSpectator: reqBody.isSpectator,
             isAuthenticated: true
-        }
-        props.setAuthState(userData)
+          }
+          props.setAuthState(userData)
+
+        });
+
+        // const result = await fetch("/", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json;charset=utf-8'
+        //     },
+        //     body: JSON.stringify(reqBody)
+        // })
+        // const userDataFromServer = await result.json()
+        
     }
 
     function loginKeyUp(event) {

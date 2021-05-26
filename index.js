@@ -1,10 +1,14 @@
-const express = require('express')
+var express = require('express')
+var app = express()
+var server = require('http').createServer(app)
+const { Server } = require("socket.io")
+const io = new Server(server)
 const config = require('config')
 const path = require('path')
 const model = require("./model")
 
 var cookieParser = require('cookie-parser')
-const app = express()
+
 
 app.use(cookieParser())
 app.set('json spaces', 2)
@@ -48,16 +52,16 @@ app.get('/tick', function (req, res) {
     })
 })
 
-// Просто вернуть данные пользователя с сервера на клиент.
-app.get('/getUserData', function (req, res) {
-    var cookies = req.cookies
-    var user = {
-        user: cookies.user.name,
-        isSpectator: cookies.user.isSpectator,
-        id: model.getUserID(cookies.user)
-    }
-    res.json(user)
-})
+// // Просто вернуть данные пользователя с сервера на клиент.
+// app.get('/getUserData', function (req, res) {
+//     var cookies = req.cookies
+//     var user = {
+//         user: cookies.user.name,
+//         isSpectator: cookies.user.isSpectator,
+//         id: model.getUserID(cookies.user)
+//     }
+//     res.json(user)
+// })
 
 // Очищает оценки.
 app.post('/clearMarks', (req, res) => {
@@ -97,9 +101,53 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = config.get('port') || 8080
+var connections = []
+io.sockets.on('connection', function(socket) {
+    connections.push(socket)
+    // console.log('a user connected', socket.id)
+    console.log(socket.handshake.query)
 
-app.listen(PORT)
+    socket.on('disconnect', function(data) {
+        connections.splice(connections.indexOf(socket), )
+        console.log('user disconnected', socket.id)
+    })
+
+    socket.on('login', (userData, callback) => {
+        console.log(userData)
+        callback({
+            status: "ok",
+            id: model.getUserID(userData)
+        })
+    })
+
+    socket.on('logout', (userData, callback) => {
+        model.delUser(userData.userName)
+        callback({
+            status: "ok",
+            // id: model.getUserID(userData)
+        })
+    })
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const PORT = config.get('port') || 80
+
+server.listen(PORT)
 
 // Запускаем обработчик ожидания
 model.startCheckingInactiveUsers()
