@@ -75,32 +75,68 @@ export const PlanningPage = (props) => {
     // }
   }, [state]);
 
-  async function getUserData() {
-    try {
-      const url = "/getUserData";
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      const json = await response.json();
-      const user = {
-        name: json.user,
-        isSpectator: json.isSpectator,
+
+
+
+
+
+
+
+
+
+  socket.on('update', (updateData) => {
+    setState((prev) => {
+      return {
+        ...prev,
+        users: updateData.users,
       };
-      setUserState((prev) => {
-        return {
-          ...prev,
-          user: user,
-        };
-      });
-      await tick();
-      intervalID.current = setInterval(tick, 2000);
-    } catch (error) {
-      console.error("Ошибка:", error);
-    }
-  }
+    });
+    setSpectators((prev) => {
+      return {
+        ...prev,
+        list: updateData.spectators,
+      };
+    });
+    setMarksVisible(updateData.marksVisible);
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+  // async function getUserData() {
+  //   try {
+  //     const url = "/getUserData";
+  //     const response = await fetch(url, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     const json = await response.json();
+  //     const user = {
+  //       name: json.user,
+  //       isSpectator: json.isSpectator,
+  //     };
+  //     setUserState((prev) => {
+  //       return {
+  //         ...prev,
+  //         user: user,
+  //       };
+  //     });
+  //     await tick();
+  //     intervalID.current = setInterval(tick, 2000);
+  //   } catch (error) {
+  //     console.error("Ошибка:", error);
+  //   }
+  // }
 
   // Глобальный клиентский тик.
   async function tick() {
@@ -148,7 +184,7 @@ export const PlanningPage = (props) => {
         body: JSON.stringify(reqBody),
       });
       await response.text();
-      await tick();
+      // await tick();
     } catch (error) {
       console.error("Ошибка:", error);
     }
@@ -164,7 +200,7 @@ export const PlanningPage = (props) => {
     try {
       const url = "/showMarks";
       await fetch(url, { method: "POST" });
-      tick();
+      // tick();
     } catch (error) {
       console.error("Ошибка:", error);
     }
@@ -174,7 +210,7 @@ export const PlanningPage = (props) => {
     try {
       const url = "/clearMarks";
       await fetch(url, { method: "POST" });
-      tick();
+      // tick();
     } catch (error) {
       console.error("Ошибка:", error);
     }

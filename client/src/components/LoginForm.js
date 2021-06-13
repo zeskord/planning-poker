@@ -16,10 +16,6 @@ export const LoginForm = (props) => {
                   userName: state.userName,
                   isSpectator: state.isSpectator
               }
-      // var userData = {
-      //   userName: state.userName,
-      //   isSpectator: state.isSpectator
-      // }
       socket.emit('login', reqBody,
         (response) => {
           console.log(response.status); // ok
@@ -35,15 +31,6 @@ export const LoginForm = (props) => {
 
         });
 
-        // const result = await fetch("/", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json;charset=utf-8'
-        //     },
-        //     body: JSON.stringify(reqBody)
-        // })
-        // const userDataFromServer = await result.json()
-        
     }
 
     function loginKeyUp(event) {

@@ -105,19 +105,32 @@ var connections = []
 io.sockets.on('connection', function(socket) {
     connections.push(socket)
     // console.log('a user connected', socket.id)
-    console.log(socket.handshake.query)
+    // console.log(socket.handshake.query)
 
     socket.on('disconnect', function(data) {
         connections.splice(connections.indexOf(socket), )
-        console.log('user disconnected', socket.id)
+        // console.log('user disconnected', socket.id)
     })
 
     socket.on('login', (userData, callback) => {
-        console.log(userData)
+        
         callback({
             status: "ok",
             id: model.getUserID(userData)
         })
+        // Обновим состояние пользователей, с учетом добавленного.
+        model.tick(userData)
+        // Получим сводный объект с данными на сервере для передачи клиенту.
+        var serverState = {
+            result: 1,
+            users: model.serializeUsers(),
+            spectators: model.serializeSpectators(),
+            marksVisible: model.marksVisible,
+            userIDs: model.getUserIDs(),
+            spectatorIDs: model.getSpectatorIDs()
+        }
+        io.sockets.emit("update", serverState);
+        console.log(connections.length)
     })
 
     socket.on('logout', (userData, callback) => {
@@ -127,6 +140,9 @@ io.sockets.on('connection', function(socket) {
             // id: model.getUserID(userData)
         })
     })
+
+
+
 
 
 })

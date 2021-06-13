@@ -120,10 +120,10 @@ model.setMark = function (userCookie, mark) {
 }
 
 // user - данные cookie
-model.tick = function (userCookie) {
+model.tick = function (userData) {
 
-    var userName = userCookie.name
-    var isSpectator = userCookie.isSpectator
+    var userName = userData.userName
+    var isSpectator = userData.isSpectator
 
     if (isSpectator) {
         spectator = this.spectators.get(userName)

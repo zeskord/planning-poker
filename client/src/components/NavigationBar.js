@@ -10,7 +10,7 @@ export const NavigationBar = (props) => {
     //   userName: undefined,
     //   isAuthenticated: false,
     // };
-    var reqBody = {userName: localStorage.getItem("name")};
+    var reqBody = {userName: localStorage.getItem("userName")};
 
     socket.emit("logout", reqBody, (response) => {
       if (response.status === "ok") {

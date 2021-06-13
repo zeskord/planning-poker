@@ -12,15 +12,20 @@ export const App = (props) => {
     }
 
     var user = {
-        name: localStorage.getItem("name"),
-        isSpectator: localStorage.getItem("isSpectator")
+        userName: localStorage.getItem("userName"),
+        isSpectator: (localStorage.getItem("isSpectator") === "true") ? true : false
     }
-    const isAuthenticated = (user.name !== null)
+    const isAuthenticated = (user.userName !== null)
 
     const [AuthState, setAuthState] = useState({
         isAuthenticated: isAuthenticated,
-        isSpectator: isAuthenticated ? user.isSpectator : undefined,
-        userName: isAuthenticated ? user.name : undefined
+        isSpectator: isAuthenticated ? user.isSpectator : false,
+        userName: isAuthenticated ? user.userName : undefined
+    })
+
+    console.log("user " , user)
+    socket.emit('login', user, (response) => {
+        console.log("login status " , response.status)
     })
 
     return (
