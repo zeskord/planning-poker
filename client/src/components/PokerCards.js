@@ -24,7 +24,7 @@ export const PokerCards = (props) => {
         variant="primary"
         key="coffee"
         title="coffee"
-        img="coffee.svg"
+        img="coffee-dark.svg"
         modalOnSelect={props.modalOnSelect}
       />
       {marks.map((mark) => (
@@ -39,7 +39,7 @@ export const PokerCards = (props) => {
         variant="primary"
         key="infinity"
         title="infinity"
-        img="infinity.svg"
+        img="infinity-dark.svg"
         modalOnSelect={props.modalOnSelect}
       />
     </div>

@@ -8,7 +8,7 @@ export const User = (props) => {
     if (isSpecialMark) {
       badge = (
         <img
-          src={props.mark + ".svg"}
+          src={props.mark + "-light.svg"}
           style={{ width: "1.5rem", height: "100%" }}
           alt={props.mark}
         />
@@ -24,7 +24,7 @@ export const User = (props) => {
     if (isSpecialMark) {
       badge = (
         <img
-          src={props.mark + ".svg"}
+          src={props.mark + "-dark.svg"}
           style={{ width: "1.5rem", height: "100%" }}
           alt={props.mark}
         />
