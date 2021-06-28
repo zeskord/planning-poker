@@ -1,7 +1,8 @@
 const express = require('express')
 const config = require('config')
 const path = require('path')
-const model = require("./model")
+// const model = require("./model")
+const Main = require("./Main")
 
 var cookieParser = require('cookie-parser')
 const app = express()
@@ -10,6 +11,9 @@ app.use(cookieParser())
 app.set('json spaces', 2)
 app.use(express.json())
 app.use(express.static("public"))
+
+// создаем объект приложения, содержащий логику.
+main = new Main()
 
 // Залогиниться.
 app.post('/', (req, res) => {
@@ -28,7 +32,7 @@ app.post('/', (req, res) => {
 app.post('/logOut', (req, res) => {
     var cookies = req.cookies
     // Сначала удаляем пользователя из модели.
-    model.delUser(cookies.user.name)
+    main.delUser(cookies.user.name)
     // Затем очищаем Cookie у пользователя на клиенте.
     res.clearCookie("user")
     res.status(200).send("OK")
@@ -37,14 +41,14 @@ app.post('/logOut', (req, res) => {
 // Периодический запрос от клиента.
 app.get('/tick', function (req, res) {
     var cookies = req.cookies
-    model.tick(cookies.user)
+    main.tick(cookies.user)
     res.json({
         result: 1,
-        users: model.serializeUsers(),
-        spectators: model.serializeSpectators(),
-        marksVisible: model.marksVisible,
-        userIDs: model.getUserIDs(),
-        spectatorIDs: model.getSpectatorIDs()
+        users: main.serializeUsers(),
+        spectators: main.serializeSpectators(),
+        marksVisible: main.marksVisible,
+        userIDs: main.getUserIDs(),
+        spectatorIDs: main.getSpectatorIDs()
     })
 })
 
@@ -54,33 +58,33 @@ app.get('/getUserData', function (req, res) {
     var user = {
         user: cookies.user.name,
         isSpectator: cookies.user.isSpectator,
-        id: model.getUserID(cookies.user)
+        id: main.getUserID(cookies.user)
     }
     res.json(user)
 })
 
 // Очищает оценки.
 app.post('/clearMarks', (req, res) => {
-    model.clearMarks()
+    main.clearMarks()
     res.status(200).send("OK")
 })
 
 // Регистрирует оценку от клиента.
 app.post('/sendMark', (req, res) => {
     var cookies = req.cookies
-    model.setMark(cookies.user, req.body.mark)
+    main.setMark(cookies.user, req.body.mark)
     res.status(200).send("OK")
 })
 
 // Показать оценки.
 app.post('/showMarks', (req, res) => {
-    model.showMarks()
+    main.showMarks()
     res.status(200).send("OK")
 })
 
 // Полный сброс модели.
 app.post('/fullReset', (req, res) => {
-    model.fullReset()
+    main.fullReset()
     res.status(200).send("OK")
 })
 
@@ -102,4 +106,4 @@ const PORT = config.get('port') || 8080
 app.listen(PORT)
 
 // Запускаем обработчик ожидания
-model.startCheckingInactiveUsers()
+main.startCheckingInactiveUsers()
