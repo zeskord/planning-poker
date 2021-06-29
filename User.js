@@ -13,6 +13,6 @@ module.exports = class User {
         this.name = name
         this.id = id
         this.lastRequestTime = new Date()
-    } 
+    }
 
 }

@@ -1,7 +1,6 @@
 const express = require('express')
 const config = require('config')
 const path = require('path')
-// const model = require("./model")
 const Main = require("./Main")
 
 var cookieParser = require('cookie-parser')
@@ -32,7 +31,7 @@ app.post('/', (req, res) => {
 app.post('/logOut', (req, res) => {
     var cookies = req.cookies
     // Сначала удаляем пользователя из модели.
-    main.delUser(cookies.user.name)
+    main.delUser(cookies.user)
     // Затем очищаем Cookie у пользователя на клиенте.
     res.clearCookie("user")
     res.status(200).send("OK")
@@ -41,15 +40,8 @@ app.post('/logOut', (req, res) => {
 // Периодический запрос от клиента.
 app.get('/tick', function (req, res) {
     var cookies = req.cookies
-    main.tick(cookies.user)
-    res.json({
-        result: 1,
-        users: main.serializeUsers(),
-        spectators: main.serializeSpectators(),
-        marksVisible: main.marksVisible,
-        userIDs: main.getUserIDs(),
-        spectatorIDs: main.getSpectatorIDs()
-    })
+    var data = main.tick(cookies.user)
+    res.json(data)
 })
 
 // Просто вернуть данные пользователя с сервера на клиент.
@@ -91,6 +83,11 @@ app.post('/fullReset', (req, res) => {
 app.get('/test', (req, res) => {
     var json = [{ test: 'OK' }]
     res.json(json)
+})
+
+app.get('/deleteInactiveUsers', (req, res) => {
+    main.deleteInactiveUsers()
+    res.status(200).send("OK")
 })
 
 if (process.env.NODE_ENV === 'production') {
