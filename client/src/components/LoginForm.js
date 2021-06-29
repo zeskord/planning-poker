@@ -15,7 +15,7 @@ export const LoginForm = (props) => {
             userName: state.userName,
             isSpectator: state.isSpectator
         }
-        const result = await fetch("/", {
+        const result = await fetch("/api/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

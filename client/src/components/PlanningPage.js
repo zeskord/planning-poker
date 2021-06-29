@@ -77,7 +77,7 @@ export const PlanningPage = (props) => {
 
   async function getUserData() {
     try {
-      const url = "/getUserData";
+      const url = "/api/getUserData";
       const response = await fetch(url, {
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export const PlanningPage = (props) => {
   // Глобальный клиентский тик.
   async function tick() {
     try {
-      const url = "/tick";
+      const url = "/api/tick";
       const response = await fetch(url);
       const responseData = await response.json();
       setState((prev) => {
@@ -134,7 +134,7 @@ export const PlanningPage = (props) => {
   async function sendMark() {
     try {
       // console.log("sendMark()")
-      const url = "/sendMark";
+      const url = "/api/sendMark";
       const reqBody = {
         user: userState.user.name,
         mark: markClient, // на сервер отправляем клиентскую оценку.
@@ -162,7 +162,7 @@ export const PlanningPage = (props) => {
 
   async function openClick(event) {
     try {
-      const url = "/showMarks";
+      const url = "/api/showMarks";
       await fetch(url, { method: "POST" });
       tick();
     } catch (error) {
@@ -172,7 +172,7 @@ export const PlanningPage = (props) => {
 
   async function clearMarksClick(event) {
     try {
-      const url = "/clearMarks";
+      const url = "/api/clearMarks";
       await fetch(url, { method: "POST" });
       tick();
     } catch (error) {

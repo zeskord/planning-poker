@@ -15,7 +15,7 @@ app.use(express.static("public"))
 main = new Main()
 
 // Залогиниться.
-app.post('/', (req, res) => {
+app.post('/api/login', (req, res) => {
     var userData = {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator)
@@ -28,7 +28,7 @@ app.post('/', (req, res) => {
 })
 
 // Разлогиниться.
-app.post('/logOut', (req, res) => {
+app.post('/api/logOut', (req, res) => {
     var cookies = req.cookies
     // Сначала удаляем пользователя из модели.
     main.delUser(cookies.user)
@@ -38,14 +38,14 @@ app.post('/logOut', (req, res) => {
 })
 
 // Периодический запрос от клиента.
-app.get('/tick', function (req, res) {
+app.get('/api/tick', function (req, res) {
     var cookies = req.cookies
     var data = main.tick(cookies.user)
     res.json(data)
 })
 
 // Просто вернуть данные пользователя с сервера на клиент.
-app.get('/getUserData', function (req, res) {
+app.get('/api/getUserData', function (req, res) {
     var cookies = req.cookies
     var user = {
         user: cookies.user.name,
@@ -56,26 +56,26 @@ app.get('/getUserData', function (req, res) {
 })
 
 // Очищает оценки.
-app.post('/clearMarks', (req, res) => {
+app.post('/api/clearMarks', (req, res) => {
     main.clearMarks()
     res.status(200).send("OK")
 })
 
 // Регистрирует оценку от клиента.
-app.post('/sendMark', (req, res) => {
+app.post('/api/sendMark', (req, res) => {
     var cookies = req.cookies
     main.setMark(cookies.user, req.body.mark)
     res.status(200).send("OK")
 })
 
 // Показать оценки.
-app.post('/showMarks', (req, res) => {
+app.post('/api/showMarks', (req, res) => {
     main.showMarks()
     res.status(200).send("OK")
 })
 
 // Полный сброс модели.
-app.post('/fullReset', (req, res) => {
+app.post('/api/fullReset', (req, res) => {
     main.fullReset()
     res.status(200).send("OK")
 })
@@ -85,6 +85,7 @@ app.get('/test', (req, res) => {
     res.json(json)
 })
 
+// Исключительно для отладки.
 app.get('/deleteInactiveUsers', (req, res) => {
     main.deleteInactiveUsers()
     res.status(200).send("OK")

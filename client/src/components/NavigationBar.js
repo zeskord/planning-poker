@@ -2,7 +2,7 @@ import React from "react";
 
 export const NavigationBar = (props) => {
   async function logoutClick(event) {
-    const url = "/logOut";
+    const url = "/api/logOut";
     await fetch(url, { method: "POST" });
     // Процедура, переданная из самого корня.
     const userData = {
@@ -13,7 +13,7 @@ export const NavigationBar = (props) => {
   }
 
   async function fullReset(event) {
-    const url = "/fullReset";
+    const url = "/api/fullReset";
     await fetch(url, { method: "POST" });
   }
 
