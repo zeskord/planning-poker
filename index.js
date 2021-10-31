@@ -3,10 +3,8 @@ const config = require('config')
 const path = require('path')
 const Main = require("./Main")
 
-var cookieParser = require('cookie-parser')
 const app = express()
 
-app.use(cookieParser())
 app.set('json spaces', 2)
 app.use(express.json())
 app.use(express.static("public"))
@@ -20,37 +18,31 @@ app.post('/api/login', (req, res) => {
         name: req.body.userName,
         isSpectator: (req.body.isSpectator)
     }
-    res.cookie("user", userData, {
-        expires: new Date(Date.now() + 315360000),
-        maxAge: new Date(Date.now() + 315360000)
-    })
     res.json(userData)
 })
 
 // Разлогиниться.
 app.post('/api/logOut', (req, res) => {
-    var cookies = req.cookies
+    var userData = JSON.parse(req.get('user-data'));
     // Сначала удаляем пользователя из модели.
-    main.delUser(cookies.user)
-    // Затем очищаем Cookie у пользователя на клиенте.
-    res.clearCookie("user")
+    main.delUser(userData.user)
     res.status(200).send("OK")
 })
 
 // Периодический запрос от клиента.
 app.get('/api/tick', function (req, res) {
-    var cookies = req.cookies
-    var data = main.tick(cookies.user)
+    var userData = JSON.parse(req.get('user-data'));
+    var data = main.tick(userData.user)
     res.json(data)
 })
 
 // Просто вернуть данные пользователя с сервера на клиент.
 app.get('/api/getUserData', function (req, res) {
-    var cookies = req.cookies
+    var userData = JSON.parse(req.get('user-data'));
     var user = {
-        user: cookies.user.name,
-        isSpectator: cookies.user.isSpectator,
-        id: main.getUserID(cookies.user)
+        user: userData.user.name,
+        isSpectator: userData.user.isSpectator,
+        id: main.getUserID(userData.user)
     }
     res.json(user)
 })
@@ -63,8 +55,8 @@ app.post('/api/clearMarks', (req, res) => {
 
 // Регистрирует оценку от клиента.
 app.post('/api/sendMark', (req, res) => {
-    var cookies = req.cookies
-    main.setMark(cookies.user, req.body.mark)
+    var userData = JSON.parse(req.get('user-data'));
+    main.setMark(userData.user, req.body.mark)
     res.status(200).send("OK")
 })
 
