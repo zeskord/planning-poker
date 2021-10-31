@@ -2,8 +2,11 @@ const express = require('express')
 const config = require('config')
 const path = require('path')
 const Main = require("./Main")
+var cors = require('cors')
 
 const app = express()
+
+app.use(cors())
 
 app.set('json spaces', 2)
 app.use(express.json())
@@ -25,14 +28,14 @@ app.post('/api/login', (req, res) => {
 app.post('/api/logOut', (req, res) => {
     var userData = JSON.parse(req.get('user-data'));
     // Сначала удаляем пользователя из модели.
-    main.delUser(userData.user)
+    main.delUser(userData)
     res.status(200).send("OK")
 })
 
 // Периодический запрос от клиента.
 app.get('/api/tick', function (req, res) {
     var userData = JSON.parse(req.get('user-data'));
-    var data = main.tick(userData.user)
+    var data = main.tick(userData)
     res.json(data)
 })
 
@@ -40,9 +43,9 @@ app.get('/api/tick', function (req, res) {
 app.get('/api/getUserData', function (req, res) {
     var userData = JSON.parse(req.get('user-data'));
     var user = {
-        user: userData.user.name,
-        isSpectator: userData.user.isSpectator,
-        id: main.getUserID(userData.user)
+        user: userData.name,
+        isSpectator: userData.isSpectator,
+        id: main.getUserID(userData)
     }
     res.json(user)
 })
@@ -56,7 +59,7 @@ app.post('/api/clearMarks', (req, res) => {
 // Регистрирует оценку от клиента.
 app.post('/api/sendMark', (req, res) => {
     var userData = JSON.parse(req.get('user-data'));
-    main.setMark(userData.user, req.body.mark)
+    main.setMark(userData, req.body.mark)
     res.status(200).send("OK")
 })
 
