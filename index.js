@@ -3,6 +3,8 @@ const config = require('config')
 const path = require('path')
 const Main = require("./Main")
 var cors = require('cors')
+const fs = require('fs')
+const https = require('https')
 
 const app = express()
 
@@ -94,9 +96,16 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = config.get('port') || 8080
+const PORT = config.get('port') || 443
 
-app.listen(PORT)
+// Если не используется SSL, закомментировать строки ниже.
+const options = {
+    cert: fs.readFileSync('./ssl/cert.pem', "utf8"),
+    key: fs.readFileSync('./ssl/key.pem', "utf8"),
+    passphrase: fs.readFileSync('./ssl/passphrase.txt', "utf8")
+}
+// app.listen(PORT)
+https.createServer(options, app).listen(PORT);
 
 // Запускаем обработчик ожидания
 main.startCheckingInactiveUsers()
