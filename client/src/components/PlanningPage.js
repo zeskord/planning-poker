@@ -3,7 +3,8 @@ import { UserList } from "./UserList";
 import { SpectatorList } from "./SpectatorList";
 import { NavigationBar } from "./NavigationBar";
 import { PokerCards } from "./PokerCards";
-import {Modal} from "bootstrap"
+import { Modal } from "bootstrap";
+import { Total } from "./Total";
 
 export const PlanningPage = (props) => {
   const intervalID = useRef(undefined);
@@ -241,11 +242,12 @@ export const PlanningPage = (props) => {
           marksVisible={marksVisible}
           currentUserName={userState.user.name}
         />
+        {marksVisible && <Total users = {state.users}/>}
         <img
           className="my-2"
           src={marksVisible ? "eye.svg" : "eye-slash.svg"}
-          // width="24"
-          // height="24"
+        // width="24"
+        // height="24"
         />
         <div className="pt-2">
           <button
@@ -285,8 +287,8 @@ export const PlanningPage = (props) => {
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         aria-hidden={!show}
-        // aria-hidden="false"
-        // onHide={handleClose}
+      // aria-hidden="false"
+      // onHide={handleClose}
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -300,7 +302,7 @@ export const PlanningPage = (props) => {
               ></button>
             </div>
             <div className="modal-body">
-              <PokerCards modalOnSelect={modalOnSelect}/>
+              <PokerCards modalOnSelect={modalOnSelect} />
             </div>
             <div className="modal-footer">
               <button
