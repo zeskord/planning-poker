@@ -1,10 +1,22 @@
 const express = require('express')
+const https = require('https');
 const config = require('config')
 const path = require('path')
 const Main = require("./Main")
+const fs = require("fs")
 
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const app = express()
+
+// Читаем настройки SSL.
+try {
+    const sslOptions = {
+        key: fs.readFileSync('key.pem'),
+        cert: fs.readFileSync('cert.pem')
+    }
+} catch (err) {
+    const sslOptions = {}
+}
 
 app.use(cookieParser())
 app.set('json spaces', 2)
@@ -99,9 +111,13 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = config.get('port') || 8080
+const PORT = config.get('port') || 80
 
-app.listen(PORT)
+if (PORT === 80) {
+    app.listen(PORT)
+} else {
+    https.createServer(sslOptions, app).listen(PORT)
+}
 
 // Запускаем обработчик ожидания
 main.startCheckingInactiveUsers()
