@@ -9,13 +9,14 @@ const cookieParser = require('cookie-parser')
 const app = express()
 
 // Читаем настройки SSL.
+const sslOptions = {}
 try {
     const sslOptions = {
         key: fs.readFileSync('key.pem'),
         cert: fs.readFileSync('cert.pem')
     }
 } catch (err) {
-    const sslOptions = {}
+    
 }
 
 app.use(cookieParser())
