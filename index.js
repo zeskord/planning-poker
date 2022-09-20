@@ -16,7 +16,7 @@ try {
         cert: fs.readFileSync('cert.pem')
     }
 } catch (err) {
-    
+    console.log(err)
 }
 
 app.use(cookieParser())
