@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Cookies from 'universal-cookie'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 // import './darktheme.css';
 
 export const App = (props) => {
@@ -12,7 +12,11 @@ export const App = (props) => {
         minHeight: '100vh'
     }
 
-    const cookies = new Cookies();
+    const tg = window.Telegtam.WebApp
+    var tgUser = tg.initDataUnsafe.user
+    console.log(tgUser)
+
+    const cookies = new Cookies()
     var user = cookies.get("user")
     const isAuthenticated = (user !== undefined)
 
@@ -29,7 +33,7 @@ export const App = (props) => {
             )
                 :
                 (
-                    <LoginForm setAuthState={setAuthState} />
+                    <LoginForm setAuthState={setAuthState} tgUser = {tgUser}/>
                 )}
         </div>
     )
