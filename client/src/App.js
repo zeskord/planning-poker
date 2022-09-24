@@ -15,12 +15,12 @@ export const App = (props) => {
     }
 
     
-    if (tg === undefined) {
-        var tgUser = undefined
-    } else {
-        var tgUser = tg.initDataUnsafe.user
-    }
-    console.log(tgUser)
+    // if (tg === undefined) {
+    //     var tgUser = undefined
+    // } else {
+    //     var tgUser = tg.initDataUnsafe.user
+    // }
+    console.log(tg)
 
     const cookies = new Cookies()
     var user = cookies.get("user")
