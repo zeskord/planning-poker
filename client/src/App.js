@@ -13,7 +13,11 @@ export const App = (props) => {
     }
 
     const tg = window.Telegtam.WebApp
-    var tgUser = tg.initDataUnsafe.user
+    if (tg === undefined) {
+        var tgUser = undefined
+    } else {
+        var tgUser = tg.initDataUnsafe.user
+    }
     console.log(tgUser)
 
     const cookies = new Cookies()
@@ -33,8 +37,11 @@ export const App = (props) => {
             )
                 :
                 (
-                    <LoginForm setAuthState={setAuthState} tgUser = {tgUser}/>
+                    <LoginForm setAuthState={setAuthState}/>
                 )}
+            <div className="mt-2">
+                <p>{tgUser}</p>
+            </div>
         </div>
     )
 }

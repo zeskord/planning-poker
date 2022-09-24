@@ -94,9 +94,6 @@ export const LoginForm = (props) => {
             Войти
           </button>
         </div>
-        <div className="mt-2">
-          <p>{props.tgUser}</p>
-        </div>
       </div>
     );
 
