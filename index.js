@@ -1,5 +1,6 @@
 const express = require('express')
-const https = require('https');
+const http = require('http')
+const https = require('https')
 const config = require('config')
 const path = require('path')
 const Main = require("./Main")
@@ -102,19 +103,20 @@ app.get('/deleteInactiveUsers', (req, res) => {
 
 if (process.env.NODE_ENV === 'production') {
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+    app.enable('trust proxy')
+    app.use((req, res, next) => {
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+    })
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
+    https.createServer(sslOptions, app).listen(443)
 }
 
 const PORT = config.get('port') || 80
 
-if (PORT === 80) {
-    app.listen(PORT)
-} else {
-    https.createServer(sslOptions, app).listen(PORT)
-}
+http.createServer(app).listen(80)
 
 // Запускаем обработчик ожидания
 main.startCheckingInactiveUsers()
