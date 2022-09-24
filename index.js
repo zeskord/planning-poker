@@ -21,6 +21,11 @@ app.set('json spaces', 2)
 app.use(express.json())
 app.use(express.static("public"))
 
+app.enable('trust proxy')
+app.use((req, res, next) => {
+    req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+})
+
 // создаем объект приложения, содержащий логику.
 main = new Main()
 
@@ -103,10 +108,7 @@ app.get('/deleteInactiveUsers', (req, res) => {
 
 if (process.env.NODE_ENV === 'production') {
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))
-    app.enable('trust proxy')
-    app.use((req, res, next) => {
-        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
-    })
+
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
