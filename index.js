@@ -104,9 +104,9 @@ app.get('/deleteInactiveUsers', (req, res) => {
 if (process.env.NODE_ENV === 'production') {
 
     app.use('*', (req, res) => {
-        res.redirect('https://' + req.headers.host + req.url);
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
     })
-    
+
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))
 
 
