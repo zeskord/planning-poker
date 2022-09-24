@@ -15,10 +15,10 @@ export const App = (props) => {
     }
 
     
-    if (tg.initData === "") {
-        var tgUser = undefined
+    if ("user" in tg.initDataUnsafe) {
+        var tgUser = tg.initDataUnsafe.user
     } else {
-        var tgUser = tg.initData
+        var tgUser = undefined
     }
     console.log(tg)
 
