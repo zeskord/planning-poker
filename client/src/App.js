@@ -3,6 +3,8 @@ import Cookies from 'universal-cookie'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+const tg = window.Telegtam.WebApp
 // import './darktheme.css';
 
 export const App = (props) => {
@@ -12,7 +14,7 @@ export const App = (props) => {
         minHeight: '100vh'
     }
 
-    const tg = window.Telegtam.WebApp
+    
     if (tg === undefined) {
         var tgUser = undefined
     } else {
