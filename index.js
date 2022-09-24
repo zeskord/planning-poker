@@ -1,10 +1,20 @@
 const express = require('express')
+const http = require('http')
+const https = require('https')
 const config = require('config')
 const path = require('path')
 const Main = require("./Main")
+const fs = require("fs")
 
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const app = express()
+
+// Читаем настройки SSL.
+const sslOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/chain.pem')
+}
 
 app.use(cookieParser())
 app.set('json spaces', 2)
@@ -92,16 +102,29 @@ app.get('/deleteInactiveUsers', (req, res) => {
 })
 
 if (process.env.NODE_ENV === 'production') {
+
+    app.use((req, res, next) => {
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+    })
+
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
+
+    app.use((req, res, next) => {
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+    })
+
+    https.createServer(sslOptions, app).listen(443)
 }
 
 const PORT = config.get('port') || 80
 
-app.listen(PORT)
+const noSslServer = http.createServer(app)
+noSslServer.listen(80)
 
 // Запускаем обработчик ожидания
 main.startCheckingInactiveUsers()

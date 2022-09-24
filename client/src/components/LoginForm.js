@@ -60,7 +60,7 @@ export const LoginForm = (props) => {
     }
 
     return (
-      <div className="container-sm">
+      <div className="container-sm mt-2">
         <div className="input-group mb-3">
           <input
             class="form-control form-control-lg"
