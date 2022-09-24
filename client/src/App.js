@@ -15,11 +15,11 @@ export const App = (props) => {
     }
 
     
-    // if (tg === undefined) {
-    //     var tgUser = undefined
-    // } else {
-    //     var tgUser = tg.initDataUnsafe.user
-    // }
+    if (tg.initData === "") {
+        var tgUser = undefined
+    } else {
+        var tgUser = tg.initData
+    }
     console.log(tg)
 
     const cookies = new Cookies()
@@ -42,7 +42,7 @@ export const App = (props) => {
                     <LoginForm setAuthState={setAuthState}/>
                 )}
             <div className="mt-2">
-                <p>o-O</p>
+                <p>{tgUser.toString()}</p>
             </div>
         </div>
     )
