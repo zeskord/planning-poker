@@ -102,6 +102,11 @@ app.get('/deleteInactiveUsers', (req, res) => {
 })
 
 if (process.env.NODE_ENV === 'production') {
+
+    app.use('*', (req, res) => {
+        res.redirect('https://' + req.headers.host + req.url);
+    })
+    
     app.use('/', express.static(path.join(__dirname, 'client', 'build')))
 
 
@@ -112,13 +117,14 @@ if (process.env.NODE_ENV === 'production') {
     app.use((req, res, next) => {
         req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
     })
-    
+
     https.createServer(sslOptions, app).listen(443)
 }
 
 const PORT = config.get('port') || 80
 
-http.createServer(app).listen(80)
+const noSslServer = http.createServer(app)
+noSslServer.listen(80)
 
 // Запускаем обработчик ожидания
 main.startCheckingInactiveUsers()
