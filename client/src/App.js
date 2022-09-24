@@ -4,7 +4,7 @@ import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const tg = window.Telegtam.WebApp
+const tg = window.Telegram.WebApp
 // import './darktheme.css';
 
 export const App = (props) => {
