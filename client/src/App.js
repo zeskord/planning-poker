@@ -42,7 +42,7 @@ export const App = (props) => {
                     <LoginForm setAuthState={setAuthState}/>
                 )}
             <div className="mt-2">
-                <p>{tgUser.toString()}</p>
+                <p>{JSON.stringify(tgUser)}</p>
             </div>
         </div>
     )
