@@ -9,13 +9,14 @@ const cookieParser = require('cookie-parser')
 const app = express()
 
 // Читаем настройки SSL.
-const sslOptions = {}
 try {
     const sslOptions = {
         key: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/cert.pem')
+        cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/cert.pem'),
+        ca: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/chain.pem')
     }
 } catch (err) {
+    const sslOptions = {}
     console.log(err)
 }
 
