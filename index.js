@@ -12,8 +12,8 @@ const app = express()
 const sslOptions = {}
 try {
     const sslOptions = {
-        key: fs.readFileSync('./ssl/key.pem'),
-        cert: fs.readFileSync('./ssl/cert.pem')
+        key: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/cert.pem')
     }
 } catch (err) {
     console.log(err)
