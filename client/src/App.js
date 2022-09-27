@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import Cookies from 'universal-cookie'
 import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+// const tg = window.Telegram.WebApp
 // import './darktheme.css';
 
 export const App = (props) => {
@@ -12,8 +14,9 @@ export const App = (props) => {
         minHeight: '100vh'
     }
 
-    const cookies = new Cookies();
+    const cookies = new Cookies()
     var user = cookies.get("user")
+
     const isAuthenticated = (user !== undefined)
 
     const [AuthState, setAuthState] = useState({
@@ -24,7 +27,7 @@ export const App = (props) => {
 
     return (
         <div className="bg-light" style={style}>
-            {AuthState.isAuthenticated ? (
+            {(AuthState.isAuthenticated | AuthState.tgAuth) ? (
                 <PlanningPage setAuthState={setAuthState} />
             )
                 :
