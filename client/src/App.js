@@ -4,7 +4,7 @@ import { PlanningPage } from './components/PlanningPage'
 import { LoginForm } from './components/LoginForm'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const tg = window.Telegram.WebApp
+// const tg = window.Telegram.WebApp
 // import './darktheme.css';
 
 export const App = (props) => {
@@ -14,16 +14,9 @@ export const App = (props) => {
         minHeight: '100vh'
     }
 
-    
-    if ("user" in tg.initDataUnsafe) {
-        var tgUser = tg.initDataUnsafe.user
-    } else {
-        var tgUser = undefined
-    }
-    console.log(tg)
-
     const cookies = new Cookies()
     var user = cookies.get("user")
+
     const isAuthenticated = (user !== undefined)
 
     const [AuthState, setAuthState] = useState({
@@ -34,16 +27,13 @@ export const App = (props) => {
 
     return (
         <div className="bg-light" style={style}>
-            {AuthState.isAuthenticated ? (
+            {(AuthState.isAuthenticated | AuthState.tgAuth) ? (
                 <PlanningPage setAuthState={setAuthState} />
             )
                 :
                 (
-                    <LoginForm setAuthState={setAuthState}/>
+                    <LoginForm setAuthState={setAuthState} />
                 )}
-            <div className="mt-2">
-                <p>{JSON.stringify(tgUser)}</p>
-            </div>
         </div>
     )
 }
