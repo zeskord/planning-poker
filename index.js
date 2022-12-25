@@ -11,9 +11,9 @@ const app = express()
 
 // Читаем настройки SSL.
 const sslOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/cert.pem'),
-    ca: fs.readFileSync('/etc/letsencrypt/live/zeskord.site/chain.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/zeskord.ru/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/zeskord.ru/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/zeskord.ru/chain.pem')
 }
 
 app.use(cookieParser())
